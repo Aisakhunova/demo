@@ -54,7 +54,7 @@ const toggleRentalForm = () => {
 
 <template>
   <v-dialog v-model="isOpen" max-width="500px" @click:outside="toggleRentalForm">
-    <v-card>
+    <v-card class="pa-5">
       <v-card-title class="headline">Форма аренды</v-card-title>
       <v-card-text>
         <v-form>

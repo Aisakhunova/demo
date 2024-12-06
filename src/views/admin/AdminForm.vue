@@ -106,7 +106,7 @@ const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
 
 <template>
   <v-dialog v-model="show" persistent width="500" max-height="700" @click:outside="emit('close')">
-    <v-card>
+    <v-card class="pa-5">
       <v-card-title>{{ car ? 'Редактировать' : 'Добавить' }} машину</v-card-title>
       <v-card-text>
         <div v-if="currentStep === 1">
@@ -146,11 +146,15 @@ const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
         </div>
       </v-card-text>
 
-      <v-card-actions>
-        <v-btn @click="prevStep" :disabled="currentStep === 1">Назад</v-btn>
-        <v-btn @click="nextStep" :disabled="!canMoveToNextStep">Далее</v-btn>
+      <v-card-actions class="buttons">
+        <div>
+          <v-btn @click="prevStep" :disabled="currentStep === 1">Назад</v-btn>
+          <v-btn @click="nextStep" :disabled="!canMoveToNextStep">Далее</v-btn>
+        </div>
+       <div>
         <v-btn color="primary" @click="save" :disabled="!canSave">Сохранить</v-btn>
         <v-btn @click="$emit('close')">Отмена</v-btn>
+       </div>
       </v-card-actions>
     </v-card>
   </v-dialog>
