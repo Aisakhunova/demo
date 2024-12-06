@@ -11,7 +11,7 @@ const car = ref(null);
 const carsStore = useCarsStore();
 
 onMounted(() => {
-  car.value = carsStore.getCarById(Number(carId)); ъ
+  car.value = carsStore.getCarById(Number(carId)); 
 });
 
 const goBack = () => {
@@ -22,7 +22,7 @@ const goBack = () => {
 
 <template>
   <v-container>
-    <v-btn @click="goBack" color="secondary" class="mb-3">
+    <v-btn @click="goBack" color="grey" class="mb-3">
       Назад
     </v-btn>
 
@@ -46,7 +46,7 @@ const goBack = () => {
 
         <p><strong>Доступность:</strong> {{ car?.available ? 'Доступна' : 'Не доступна' }}</p>
 
-        <v-carousel show-arrows height="150" :show-indicators="false">
+        <v-carousel show-arrows :show-indicators="false">
           <v-carousel-item v-for="(image, index) in car?.images" :key="index">
             <v-img 
               :src="image" 

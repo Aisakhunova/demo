@@ -110,7 +110,7 @@ export const useCarsStore = defineStore('cars', {
     rentalRequests: [
       {
         id: 1,
-        renterName: 'John Doe',
+        renterName: 'Иван Иванов',
         rentalStartDate: '2024-12-06',
         rentalEndDate: '2024-12-12',
         status: 'Pending',
@@ -118,7 +118,7 @@ export const useCarsStore = defineStore('cars', {
       },
       {
         id: 2,
-        renterName: 'Jane Smith',
+        renterName: 'Петр Петров',
         rentalStartDate: '2024-12-07',
         rentalEndDate: '2024-12-12',
         status: 'Approved',

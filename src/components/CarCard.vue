@@ -113,4 +113,11 @@ const navigateToCarDetail = () => {
   display: none;
 }
 
+@media(max-width: 600px){
+  .buttons{
+    flex-direction: column;
+    align-items: end;
+    gap: 16px;
+  }
+}
 </style>
