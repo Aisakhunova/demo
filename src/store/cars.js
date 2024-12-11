@@ -23,7 +23,7 @@ export const useCarsStore = defineStore('cars', {
         transmission: 'Automatic',
         fuel: 'Gasoline',
         description: 'Reliable sedan for everyday use.',
-        checkboxes: ['Sunroof', 'Leather Seats'],
+        checkboxes: ['AUX input', 'USB charger'],
         partner: "Coca Cola",
         fuelConsumption: { cityFuel: 7.2, highway: 5.0, combined: 6.0 },
       },
@@ -137,6 +137,30 @@ export const useCarsStore = defineStore('cars', {
         images: [
           "https://di-uploads-pod13.dealerinspire.com/bmwofomaha/uploads/2022/06/2022-BMW-3-SERIES.jpg",
           'https://dealerinspire-image-library-prod.s3.us-east-1.amazonaws.com/images/xcLdEmJZbeLIpCejVb4Ae4BDcNZgwMkuaYo3xNF6.jpg'
+        ],
+        year: 2022,
+        engineType: 'V6',
+        transmission: 'Automatic',
+        fuel: 'Gasoline',
+        description: 'Luxury sedan with premium features and sporty handling.',
+        checkboxes: ['Harman Kardon Audio', 'Heads-Up Display'],
+        partner: 'Fanta',
+        fuelConsumption: { cityFuel: 5.1, highway: 4.2, combined: 5.4 },
+      },
+      {
+        id: 7,
+        city: 'Варшава',
+        model: 'BMW 7 Series',
+        type: 'Такси',
+        price: {
+          day: 24,
+          week: 50, 
+          month: 800
+        },
+        available: true,
+        images: [
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTyQkEDvbNQT9-V78BtGtMTC1LWDg8oMmKpQ&s",
+          'https://www.topgear.com/sites/default/files/2023/08/P90492181_highRes_bmw-i7-xdrive60-m-sp%20%281%29.jpg'
         ],
         year: 2022,
         engineType: 'V6',

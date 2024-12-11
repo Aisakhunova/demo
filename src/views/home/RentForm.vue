@@ -35,9 +35,8 @@ const submitRentalForm = () => {
     return;
   }
 
-  const rating = (Math.random() * (5 - 3) + 3).toFixed(1); 
-
-  const rides = Math.floor(Math.random() * 501); 
+  const rating = 4.7; 
+  const rides = 150; 
 
   const requestBody = {
     renterName: renterName.value,
