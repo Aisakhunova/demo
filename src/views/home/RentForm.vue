@@ -16,7 +16,7 @@ const props = defineProps({
 const emit = defineEmits(['toggleRentalForm', 'submitRentalForm']);
 const store = useCarsStore(); 
 
-const renterName = ref('');
+const renterName = ref('Александр Александров');
 const rentalStartDate = ref('');
 const rentalEndDate = ref('');
 const isOpen = ref(false)
@@ -34,22 +34,36 @@ const submitRentalForm = () => {
     alert('Пожалуйста, заполните все поля');
     return;
   }
+
+  const rating = (Math.random() * (5 - 3) + 3).toFixed(1); 
+
+  const rides = Math.floor(Math.random() * 501); 
+
   const requestBody = {
     renterName: renterName.value,
     rentalStartDate: rentalStartDate.value,
     rentalEndDate: rentalEndDate.value,
     approved: false,
     carId: props.carId,
+    rating: parseFloat(rating), 
+    rides: rides,
   };
-  console.log("RENT - ", requestBody)
+
+  console.log("RENT - ", requestBody);
+  
   store.addRentalRequest(requestBody);
+
+  rentalEndDate.value = '';
+  rentalStartDate.value = '';
+  
   emit('submitRentalForm', requestBody);
-  emit('toggleRentalForm'); 
+  emit('toggleRentalForm');
 };
 
 const toggleRentalForm = () => {
   emit('toggleRentalForm');
 };
+
 </script>
 
 <template>
@@ -62,6 +76,7 @@ const toggleRentalForm = () => {
             v-model="renterName"
             label="Имя арендатора"
             required
+            readonly
           />
           <v-text-field
             v-model="rentalStartDate"

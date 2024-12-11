@@ -31,13 +31,26 @@ const navigateToCarDetail = () => {
 </script>
 
 <template>
-  <v-card class="card pa-5">
-    <v-card-title><h3>{{ props.car.model }}</h3></v-card-title>
+  <v-card class="card pa-1">
+    <v-card-title>{{ props.car.model }}</v-card-title>
 
     <v-card-text>
       <div class="card-desc">
         <h4>Город: {{ props.car.city }}</h4>
-        <p>Цена: {{ props.car.price }}$</p>
+        <h4>Тип аренды: {{ props.car.type }}</h4>
+        <h4>Цена</h4>
+       <div class="pl-3">
+        <p> {{ props.car.price.day }}$ в день</p>
+        <p>{{ props.car.price.week }}$ в неделю</p>
+        <p>{{ props.car.price.month }}$ в месяц</p>
+       </div>
+       <h4>Расход топлива:</h4>
+       <div class="pl-3">
+        <p>Город: {{ props.car.fuelConsumption.city }}</p>
+        <p>Шоссе: {{ props.car.fuelConsumption.highway }}</p>
+        <p>Смешанный: {{ props.car.fuelConsumption.combined }}</p>
+       </div>
+        <h4>Партнер: {{ props.car.partner }}</h4>
         <p v-if="car.available" class="success--text">Машина доступна</p>
         <p v-else class="red--text">
           Забронирована до: 
@@ -45,30 +58,38 @@ const navigateToCarDetail = () => {
         </p>
       </div>
 
-      <v-carousel show-arrows :show-indicators="false" height="300">
+      <v-carousel delimiter-icon="mdi-square" show-arrows="hover" height="120">
         <v-carousel-item v-for="(image, index) in props.car.images" :key="index">
           <v-img :src="image" alt="Car image" aspect-ratio="16/9" cover/>
         </v-carousel-item>
       </v-carousel>
     </v-card-text>
 
-    <v-card-actions class="buttons">
-      <div v-if="props.isAdmin" class="buttons-right">
-        <v-btn theme="dark" variant="flat" @click="$emit('edit', car)">Редактировать</v-btn>
-        <v-btn theme="red" color="error" variant="flat" @click="$emit('delete', car.id)">Удалить</v-btn>
+   
+      <div v-if="props.isAdmin" class="px-2">
+        <div >
+          <v-btn color="green" variant="flat" @click="$emit('edit', car)" width="100%">Редактировать</v-btn>
+        </div>
+        <div>
+          <v-btn theme="red" color="error" variant="flat" @click="$emit('delete', car.id)" width="100%" class="mt-1">Удалить</v-btn>
+        </div>
       </div>
 
-      <div v-else>
+      <div v-else class="px-2">
         <v-btn 
           :class="car.available ? 'success--text' : 'red--text'" 
           @click="toggleRentalForm" variant="flat" 
           :disabled="!car.available"
+          width="100%"
+          color="green"
         >
           Арендовать
         </v-btn>
       </div>
-      <v-btn theme="dark" variant="flat"  @click="navigateToCarDetail">Подробнее</v-btn>
-    </v-card-actions>
+      <div class="px-2">
+        <v-btn theme="grey" color="grey" variant="flat" @click="navigateToCarDetail" width="100%" class="mt-1 ">Подробнее</v-btn>
+      </div>
+
 
   </v-card>
 
@@ -97,7 +118,6 @@ const navigateToCarDetail = () => {
 }
 
 .card-desc{
-  font-size: 20px;
   padding: 5px 5px 5px 0;
 }
 
@@ -107,11 +127,24 @@ const navigateToCarDetail = () => {
 
 .buttons{
   display: flex;
-  justify-content: space-between;
 }
 .v-carousel__controls {
   display: none;
 }
+
+.buttons-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttons-wrapper-1{
+  display: flex;
+  flex-direction: column;
+}
+
+
+
 
 @media(max-width: 600px){
   .buttons{

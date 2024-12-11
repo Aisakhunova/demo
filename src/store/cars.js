@@ -7,7 +7,12 @@ export const useCarsStore = defineStore('cars', {
         id: 1,
         city: 'Познань',
         model: 'Toyota Corolla',
-        price: 20000,
+        type: 'Курьер',
+        price: {
+          day: 10,
+          week: 20, 
+          month: 200
+        },
         available: true,
         images: [
           "https://i.ytimg.com/vi/GZIsGTcMWu0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDpnOlgHMtHB2MmLGyAsdpO7-ka7A",
@@ -19,12 +24,19 @@ export const useCarsStore = defineStore('cars', {
         fuel: 'Gasoline',
         description: 'Reliable sedan for everyday use.',
         checkboxes: ['Sunroof', 'Leather Seats'],
+        partner: "Coca Cola",
+        fuelConsumption: { cityFuel: 7.2, highway: 5.0, combined: 6.0 },
       },
       {
         id: 2,
         city: 'Краков',
         model: 'Honda Civic',
-        price: 23000,
+        type: 'Такси',
+        price: {
+          day: 10,
+          week: 20, 
+          month: 200
+        },
         available: true,
         images: [
           "https://automobiles.honda.com/-/media/Honda-Automobiles/Vehicles/2025/civic-sedan/non-VLP/10-Family/MY25_Civic_Family_Card_Jelly_Hybrid_2x.jpg?sc_lang=en",
@@ -36,12 +48,19 @@ export const useCarsStore = defineStore('cars', {
         fuel: 'Gasoline',
         description: 'Sporty and fuel-efficient.',
         checkboxes: ['Backup Camera', 'Bluetooth'],
+        partner: "Fanta",
+        fuelConsumption: { cityFuel: 5.2, highway: 4.0, combined: 4.7 },
       },
       {
         id: 3,
         city: 'Варшава',
         model: 'Ford Focus',
-        price: 21000,
+        type: 'Мопед',
+        price: {
+          day: 10,
+          week: 20, 
+          month: 200
+        },
         available: true,
         images: [
           "https://c0.carsie.ie/d43864c90df075c94489ddbe4ca5ffe92d17be1f5053221b53bb4ff460538d17.jpg",
@@ -53,12 +72,19 @@ export const useCarsStore = defineStore('cars', {
         fuel: 'Diesel',
         description: 'Compact and stylish with great performance.',
         checkboxes: ['Heated Seats', 'Apple CarPlay'],
+        partner: 'Sprite',
+        fuelConsumption: { cityFuel: 6.5, highway: 4.3, combined: 6.6 },
       },
       {
         id: 4,
         city: 'Краков',
         model: 'Chevrolet Malibu',
-        price: 25000,
+        type: 'Другое',
+        price: {
+          day: 10,
+          week: 20, 
+          month: 200
+        },
         available: true,
         images: [
           "https://content.homenetiol.com/2000292/2143540/0x0/ed9d5c032cdd47ecafa5c34aa2330a5e.jpg",
@@ -70,12 +96,19 @@ export const useCarsStore = defineStore('cars', {
         fuel: 'Gasoline',
         description: 'Spacious and comfortable sedan for family trips.',
         checkboxes: ['Remote Start', 'Navigation System'],
+        partner: "Coca Cola",
+        fuelConsumption: { cityFuel: 8.3, highway: 7.0, combined: 8.2 },
       },
       {
         id: 5,
         city: 'Познань',
         model: 'Tesla Model 3',
-        price: 35000,
+        type: 'Такси',
+        price: {
+          day: 10,
+          week: 20, 
+          month: 200
+        },
         available: true,
         images: [
           "https://hips.hearstapps.com/hmg-prod/images/2023-tesla-model-3-103-1671468220.jpeg",
@@ -87,12 +120,19 @@ export const useCarsStore = defineStore('cars', {
         fuel: 'Electric',
         description: 'Innovative electric vehicle with autopilot.',
         checkboxes: ['Autopilot', 'Panoramic Roof'],
+        partner: 'Sprite',
+        fuelConsumption: { cityFuel: 7.6, highway: 6.1, combined: 6.8 },
       },
       {
         id: 6,
         city: 'Варшава',
         model: 'BMW 3 Series',
-        price: 40000,
+        type: 'Курьер',
+        price: {
+          day: 15,
+          week: 20, 
+          month: 200
+        },
         available: true,
         images: [
           "https://di-uploads-pod13.dealerinspire.com/bmwofomaha/uploads/2022/06/2022-BMW-3-SERIES.jpg",
@@ -104,6 +144,8 @@ export const useCarsStore = defineStore('cars', {
         fuel: 'Gasoline',
         description: 'Luxury sedan with premium features and sporty handling.',
         checkboxes: ['Harman Kardon Audio', 'Heads-Up Display'],
+        partner: 'Fanta',
+        fuelConsumption: { cityFuel: 5.1, highway: 4.2, combined: 5.4 },
       },
     ],
     
@@ -111,18 +153,26 @@ export const useCarsStore = defineStore('cars', {
       {
         id: 1,
         renterName: 'Иван Иванов',
+        rating: 4,
+        rides: 75,
         rentalStartDate: '2024-12-06',
         rentalEndDate: '2024-12-12',
         status: 'Pending',
         carId: 1,
+        rating: 4.6,
+        rides: 140
       },
       {
         id: 2,
         renterName: 'Петр Петров',
+        rating: 4.7,
+        rides: 15,
         rentalStartDate: '2024-12-07',
         rentalEndDate: '2024-12-12',
         status: 'Approved',
         carId: 2,
+        rating: 3.8,
+        rides: 56
       },
     ],
   }),

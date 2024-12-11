@@ -18,6 +18,15 @@ const goBack = () => {
   router.go(-1); 
 };
 
+// Информация о компании
+const companyInfo = ref({
+  name: "Car Rentals Ltd.",
+  rating: 4.5,
+  reviewsCount: 120,
+  description: "Car Rentals Ltd. offers a wide range of vehicles for all your rental needs. Whether you're looking for a luxury ride or an economy car, we have something for you!",
+  contact: "+123 456 789",
+  location: "123 Main Street, Cityville"
+});
 </script>
 
 <template>
@@ -26,27 +35,54 @@ const goBack = () => {
       Назад
     </v-btn>
 
-    <v-card>
+    <v-card class="pa-5">
       <v-card-title>{{ car?.model }}</v-card-title>
       <v-card-text>
-        <p><strong>Модель:</strong> {{ car?.model }}</p>
-        <p><strong>Цена:</strong> {{ car?.price }}$</p>
-        <p><strong>Год выпуска:</strong> {{ car?.year }}</p>
-        <p><strong>Тип двигателя:</strong> {{ car?.engineType }}</p>
-        <p><strong>Трансмиссия:</strong> {{ car?.transmission }}</p>
-        <p><strong>Тип топлива:</strong> {{ car?.fuel }}</p>
-        <p><strong>Описание:</strong> {{ car?.description }}</p>
-        
-        <div v-if="car?.checkboxes.length">
-          <p><strong>Опции:</strong></p>
-          <ul>
-            <li v-for="(option, index) in car.checkboxes" :key="index">{{ option }}</li>
-          </ul>
+        <div class="d-flex">
+          <div>
+          <p><strong>Модель:</strong> {{ car?.model }}</p>
+          <p><strong>Цена в день:</strong> {{ car?.price.day }}$</p>
+          <p><strong>Цена в неделю:</strong> {{ car?.price.week }}$</p>
+          <p><strong>Цена в месяц:</strong> {{ car?.price.month }}$</p>
+          <p><strong>Год выпуска:</strong> {{ car?.year }}</p>
+          <p><strong>Тип двигателя:</strong> {{ car?.engineType }}</p>
+          <p><strong>Трансмиссия:</strong> {{ car?.transmission }}</p>
+          <p><strong>Тип топлива:</strong> {{ car?.fuel }}</p>
+          <p><strong>Описание:</strong> {{ car?.description }}</p>
+          
+          <div v-if="car?.checkboxes.length">
+            <p><strong>Опции:</strong></p>
+            <ul class="ml-8">
+              <li v-for="(option, index) in car.checkboxes" :key="index">{{ option }}</li>
+            </ul>
+          </div>
+
+          <p><strong>Доступность:</strong> {{ car?.available ? 'Доступна' : 'Не доступна' }}</p>
         </div>
 
-        <p><strong>Доступность:</strong> {{ car?.available ? 'Доступна' : 'Не доступна' }}</p>
+        <!-- Рейтинг и информация о компании -->
+        
+        <v-divider vertical class="mx-5"></v-divider>
 
-        <v-carousel show-arrows :show-indicators="false">
+        <div class="mb-4">
+          <h3>Описание</h3>
+          <div>
+            {{ car?.description }}
+          </div>
+          <h3 class="mt-3">О компании:</h3>
+          <div class="d-flex align-center mb-4">
+          <v-icon color="yellow">mdi-star</v-icon>
+          <span class="ml-2">{{ companyInfo.rating }} / 5</span>
+          <span class="ml-4">({{ companyInfo.reviewsCount }} отзывов)</span>
+        </div>
+          
+          <p>{{ companyInfo.description }}</p>
+          <p><strong>Контакты:</strong> {{ companyInfo.contact }}</p>
+          <p><strong>Адрес:</strong> {{ companyInfo.location }}</p>
+        </div>
+        </div>
+
+        <v-carousel show-arrows :show-indicators="false" class="mt-3">
           <v-carousel-item v-for="(image, index) in car?.images" :key="index">
             <v-img 
               :src="image" 
@@ -61,4 +97,3 @@ const goBack = () => {
     </v-card>
   </v-container>
 </template>
-

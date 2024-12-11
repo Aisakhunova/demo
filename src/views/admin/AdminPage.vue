@@ -82,12 +82,11 @@ onMounted(() => {
   <v-container>
     <v-btn @click="openForm" theme="dark" color="dark" variant="flat" class="mb-5">Добавить машину</v-btn>
     <v-row >
-      <v-col v-for="car in carsStore.cars" :key="car.id" cols="12" md="4">
-        <v-card class="card pa-5">
-          <v-card-title><h3>{{ car.model }}</h3></v-card-title>
+      <v-col v-for="car in carsStore.cars" :key="car.id" cols="12" md="3">
+        <v-card class="card pa-2">
+          <v-card-title>{{ car.model }}</v-card-title>
           <v-card-text>
             <div class="card-desc">
-              <p>Цена: {{ car.price }}$</p>
               <p v-if="isAdmin">Доступные заявки: {{ getRequestsForCar(car.id).length }}</p>
             </div>
           </v-card-text>
@@ -97,39 +96,51 @@ onMounted(() => {
     <v-divider></v-divider>
   <h1 class="py-5">Ваши Заявки</h1>
   <v-row>
-    <v-col v-for="request in requests" :key="request.id" cols="12" md="6"> {{ console.log("MY REQS - ", requests) }}
-      <v-card class="card pa-5" >
-        <v-card-title><h3>{{ request.renterName }}</h3></v-card-title>
+    <v-col v-for="request in requests" :key="request.id" cols="12" md="3"> {{ console.log("MY REQS - ", requests) }}
+      <v-card class="card pa-2" >
+        <v-card-title>{{ request.renterName }}</v-card-title>
         <v-card-text>
           <div class="card-desc">
-            <p>Дата начала аренды: {{ request.rentalStartDate }}</p>
-            <p>Дата окончания аренды: {{ request.rentalEndDate }}</p>
+            <div>
+              <div class="d-flex align-center mb-4">
+                <v-icon color="yellow">mdi-star</v-icon>
+                <span class="ml-2">{{ request.rating }} / 5</span>
+                <span class="ml-4">({{ request.rides }} поездок)</span>
+              </div>
+            </div>
+            <div>
+              Дата начала аренды: <p>{{ request.rentalStartDate }}</p>
+            </div>
+            <div>
+              Дата окончания аренды: <p>{{ request.rentalEndDate }}</p>
+            </div>
             <p>Статус: {{ request.status === 'approved' ? 'Одобрено' : 'Ожидает одобрения' }}</p>
           </div>
-          <div class="buttons">
-            <v-btn color="grey" @click="showCarDetails(request)">Посмотреть</v-btn>
-            <div>
-              <v-btn v-if="request.status !== 'approved'" theme="red" color="green" variant="flat" @click="approveRental(request)">Одобрить</v-btn>
-              <v-btn v-if="request.status !== 'approved'" color="error" @click="rejectRental(request)" class="ml-3">Отклонить</v-btn>
-            </div>
+          <div class="buttons-wrapper">
+            <v-btn color="grey" @click="showCarDetails(request)" width="100%">Машина</v-btn>
+              <v-btn v-if="request.status !== 'approved'" color="green" variant="flat" @click="approveRental(request)" width="100%" class="mt-1">Одобрить</v-btn>
+              <v-btn v-if="request.status !== 'approved'" color="error" @click="rejectRental(request)" width="100%" class="mt-1">Отклонить</v-btn>
+       
           </div>
         </v-card-text>
       </v-card>
     </v-col>
 
-    <v-dialog v-model="carDetailsDialog" max-width="600">
+    <v-dialog v-model="carDetailsDialog" max-width="600" max-height="750">
       <v-card>
         <v-card-title>Детали машины</v-card-title>
         <v-card-text v-if="selectedCar">
           <p>Модель: {{ selectedCar.model }}</p>
-          <p>Цена: {{ selectedCar.price }}$</p>
+          <p>Цена в день: {{ selectedCar.price.day }}$</p>
+          <p>Цена в неделю: {{ selectedCar.price.week }}$</p>
+          <p>Цена в месяц: {{ selectedCar.price.month }}$</p>
           <p>Год: {{ selectedCar.year }}</p>
           <p>Тип двигателя: {{ selectedCar.engineType }}</p>
           <p>Трансмиссия: {{ selectedCar.transmission }}</p>
           <p>Топливо: {{ selectedCar.fuel }}</p>
-          <v-carousel show-arrows>
+          <v-carousel show-arrows height="300">
             <v-carousel-item v-for="(image, index) in selectedCar.images" :key="index">
-              <v-img :src="image" alt="Car image" aspect-ratio="16/9" />
+              <v-img :src="image" alt="Car image" aspect-ratio="16/9" cover />
             </v-carousel-item>
           </v-carousel>
         </v-card-text>
@@ -142,7 +153,7 @@ onMounted(() => {
 
   <h1 class="py-5">Ваши машины</h1>
     <v-row>
-      <v-col v-for="car in cars" :key="car.id" cols="12" md="6">
+      <v-col v-for="car in cars" :key="car.id" cols="12" md="3">
         <CarCard :car="car" @edit="editCar" @delete="deleteCar" :isAdmin="true"/>
       </v-col>
     </v-row>

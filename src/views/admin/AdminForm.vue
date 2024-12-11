@@ -13,19 +13,37 @@ const show = ref(true);
 const currentStep = ref(1);
 const form = ref({
   city: '',
-  rentalType: '',
+  type: '',
   partner: '',
   model: '',
-  price: '',
+  priceDay: '',
+  priceWeek: '',
+  priceMonth: '',
   available: false,
   year: '',
   engineType: '',
   transmission: '',
   fuel: '',
   description: '',
-  checkboxes: [],
+  checkboxes: [], 
   images: [], 
+  cityFuel: '',
+  highwayFuel: '',
+  combinedFuel: '',
 });
+
+const availableOptions = ref([
+  { label: 'All-wheel drive', value: 'option1' },
+  { label: 'Android Auto', value: 'option2' },
+  { label: 'Apple CarPlay', value: 'option3' },
+  { label: 'AUX input', value: 'option4' },
+  { label: 'Blind Spot Warning', value: 'option5' },
+  { label: 'Child seat', value: 'option6' },
+  { label: 'USB input', value: 'option7' },
+  { label: 'Bluetooth', value: 'option8' },
+  { label: 'USB charger', value: 'option9' },
+  { label: 'GPS', value: 'option10' }
+]);
 
 watch(
   () => props.car,
@@ -35,10 +53,12 @@ watch(
     } else {
       form.value = {
         city: '',
-        rentalType: '',
+        type: '',
         partner: '',
         model: '',
-        price: '',
+        priceDay: '',
+        priceWeek: '',
+        priceMonth: '',
         available: false,
         year: '',
         engineType: '',
@@ -47,6 +67,9 @@ watch(
         description: '',
         checkboxes: [],
         images: [],
+        cityFuel: '',
+        highwayFuel: '',
+        combinedFuel: '',
       };
     }
   },
@@ -55,9 +78,9 @@ watch(
 
 const save = () => {
   if (props.car) {
-    carsStore.updateCar(form.value); 
+    carsStore.updateCar({...form.value, price: {day: form.value.priceDay, week: form.value.priceWeek, month: form.value.priceMonth}, fuelConsumption: {cityFuel: form.value.cityFuel, highway: form.value.highwayFuel, combined: form.value.combinedFuel }}); 
   } else {
-    carsStore.addCar(form.value); 
+    carsStore.addCar({...form.value, price: {day: form.value.priceDay, week: form.value.priceWeek, month: form.value.priceMonth}, fuelConsumption: {cityFuel: form.value.cityFuel, highway: form.value.highwayFuel, combined: form.value.combinedFuel }}); 
   }
   emit('close'); 
 };
@@ -87,8 +110,8 @@ const handleFileChange = (event) => {
   form.value.images = [...form.value.images, ...imageUrls];
 };
 
-const isStep1Valid = computed(() => form.value.city && form.value.rentalType && form.value.partner);
-const isStep2Valid = computed(() => form.value.model && form.value.price && form.value.year && form.value.engineType && form.value.transmission && form.value.fuel);
+const isStep1Valid = computed(() => form.value.city && form.value.type && form.value.partner);
+const isStep2Valid = computed(() => form.value.model && form.value.priceDay && form.value.priceWeek && form.value.priceMonth && form.value.year && form.value.engineType && form.value.transmission && form.value.fuel && form.value.cityFuel && form.value.highwayFuel && form.value.combinedFuel);
 const isStep3Valid = computed(() => form.value.description && form.value.checkboxes.length > 0);
 const isStep4Valid = computed(() => form.value.images.length > 0);
 
@@ -100,8 +123,6 @@ const canMoveToNextStep = computed(() => {
 });
 
 const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
-
-
 </script>
 
 <template>
@@ -111,13 +132,18 @@ const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
       <v-card-text>
         <div v-if="currentStep === 1">
           <v-select v-model="form.city" :items="['Варшава', 'Краков', 'Познань']" label="Город" />
-          <v-select v-model="form.rentalType" :items="['Курьер', 'Такси']" label="Тип аренды" />
-          <v-text-field v-model="form.partner" label="Партнер" />
+          <v-select v-model="form.type" :items="['Курьер', 'Такси', 'Мопед', 'Другое']" label="Тип аренды" />
+          <v-select v-model="form.partner" :items="['Coca Cola', 'Fanta', 'Sprite']" label="Партнер" />
         </div>
 
         <div v-if="currentStep === 2">
           <v-text-field v-model="form.model" label="Модель" />
-          <v-text-field v-model="form.price" label="Цена" type="number" />
+          <v-text-field v-model="form.priceDay" label="Цена в день" type="number" />
+          <v-text-field v-model="form.priceWeek" label="Цена в неделю" type="number" />
+          <v-text-field v-model="form.priceMonth" label="Цена в месяц" type="number" />
+          <v-text-field v-model="form.cityFuel" label="Расход топлива в городе" type="number" />
+          <v-text-field v-model="form.highwayFuel" label="Расход топлива на шоссе" type="number" />
+          <v-text-field v-model="form.combinedFuel" label="Расход топлива в смешенной местности" type="number" />
           <v-text-field v-model="form.year" label="Год" type="number" />
           <v-text-field v-model="form.engineType" label="Тип двигателя" />
           <v-text-field v-model="form.transmission" label="Трансмиссия" />
@@ -126,12 +152,16 @@ const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
 
         <div v-if="currentStep === 3">
           <v-textarea v-model="form.description" label="Описание" />
-          <v-checkbox
-            v-for="(checkbox, index) in 10"
-            :key="index"
-            v-model="form.checkboxes"
-            :label="'Опция ' + (index + 1)"
-          />
+          
+          <v-row>
+            <v-col v-for="(option, index) in availableOptions" :key="index" cols="6">
+              <v-checkbox
+                v-model="form.checkboxes"
+                :label="option.label"
+                :value="option.value"
+              />
+            </v-col>
+          </v-row>
         </div>
 
         <div v-if="currentStep === 4">
@@ -151,10 +181,10 @@ const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
           <v-btn @click="prevStep" :disabled="currentStep === 1">Назад</v-btn>
           <v-btn @click="nextStep" :disabled="!canMoveToNextStep">Далее</v-btn>
         </div>
-       <div>
-        <v-btn color="primary" @click="save" :disabled="!canSave">Сохранить</v-btn>
-        <v-btn @click="$emit('close')">Отмена</v-btn>
-       </div>
+        <div>
+          <v-btn color="primary" @click="save" :disabled="!canSave">Сохранить</v-btn>
+          <v-btn @click="$emit('close')">Отмена</v-btn>
+        </div>
       </v-card-actions>
     </v-card>
   </v-dialog>
