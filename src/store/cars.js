@@ -256,6 +256,5 @@ export const useCarsStore = defineStore('cars', {
       );
       return rental ? rental.rentalEndDate : null;
     }
-    
   },
 });

@@ -181,6 +181,7 @@ const filteredCars = computed(() => {
         </v-slide-y-transition>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col v-for="car in filteredCars" :key="car.id" cols="12" md="3">
         <CarCard :car="car" />

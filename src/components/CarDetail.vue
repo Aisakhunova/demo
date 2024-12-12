@@ -34,66 +34,99 @@ const companyInfo = ref({
     <v-btn @click="goBack" color="grey" class="mb-3">
       Назад
     </v-btn>
-
     <v-card class="pa-5">
-      <v-card-title>{{ car?.model }}</v-card-title>
+      <v-row>
+        <v-col cols="12" md="7">
+          <div v-if="car">
+            <v-carousel show-arrows :show-indicators="false" class="mt-3">
+              <v-carousel-item v-for="(image, index) in car?.images" :key="index">
+                <v-img 
+                  :src="image" 
+                  alt="Car image" 
+                  aspect-ratio="16/9" 
+                  cover
+                  class="fill-height"
+                  :lazy="false" 
+                />
+              </v-carousel-item>
+            </v-carousel>
+          </div>
+        </v-col>
+
+        <v-col cols="12" md="5">
+          <v-card class="pa-5">
+          <h2 class="mb-1">{{ car?.model }} {{ car?.year }}</h2>
+          <h3 class="mb-3 text-green">{{ car?.price.day }}$ /день, {{ car?.price.week }}$ /неделя, {{ car?.price.month }}$ /месяц</h3>
+          <div class="info-table">
+            <div class="info-row">
+              <div class="info-title"><strong>Тип двигателя:</strong></div>
+              <div class="info-title"><strong>Трансмиссия:</strong></div>
+              <div class="info-title"><strong>Тип топлива:</strong></div>
+            </div>
+            <div class="info-row">
+              <div class="info-value">{{ car?.engineType }}</div>
+              <div class="info-value">{{ car?.transmission }}</div>
+              <div class="info-value">{{ car?.fuel }}</div>
+            </div>
+          </div>
+          <v-divider class="mt-6"></v-divider>
+          <h3 class="mt-2">Расход топлива</h3>
+          <div class="info-table">
+            <div class="info-row">
+              <div class="info-title"><strong>Город:</strong></div>
+              <div class="info-title"><strong>Шоссе:</strong></div>
+              <div class="info-title"><strong>Смешанный:</strong></div>
+            </div>
+            <div class="info-row">
+              <div class="info-value">{{ car?.fuelConsumption.cityFuel }}</div>
+              <div class="info-value">{{ car?.fuelConsumption.highway }}</div>
+              <div class="info-value">{{ car?.fuelConsumption.combined }}</div>
+            </div>
+          </div>
+          </v-card>
+
+          <v-card class="pa-5 mt-5">
+            <h4 class="mb-1">Автор объявления</h4>
+            <v-row dense>
+              <v-col cols="auto">
+                <div class="py-1"><v-icon color="black">mdi-account</v-icon></div>
+                <div class="py-1"><v-icon color="black">mdi-phone</v-icon></div>
+                <div class="pt-1"><v-icon color="black">mdi-map-marker</v-icon></div>
+              </v-col>
+              <v-col cols="auto">
+                <div class="py-1">{{ companyInfo.name }}</div>
+                <div class="py-1">{{ companyInfo.contact }}</div>
+                <div class="pt-1">{{companyInfo.location  }}</div>
+              </v-col>
+              <v-col cols="12" md="12">
+                <v-icon color="yellow">mdi-star</v-icon>
+                  <span class="ml-2">{{ companyInfo.rating }} / 5</span>
+                  <span class="ml-4">({{ companyInfo.reviewsCount }} отзывов)</span>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+      
       <v-card-text>
-        <div class="d-flex">
-          <div>
-          <p><strong>Модель:</strong> {{ car?.model }}</p>
-          <p><strong>Цена в день:</strong> {{ car?.price.day }}$</p>
-          <p><strong>Цена в неделю:</strong> {{ car?.price.week }}$</p>
-          <p><strong>Цена в месяц:</strong> {{ car?.price.month }}$</p>
-          <p><strong>Год выпуска:</strong> {{ car?.year }}</p>
-          <p><strong>Тип двигателя:</strong> {{ car?.engineType }}</p>
-          <p><strong>Трансмиссия:</strong> {{ car?.transmission }}</p>
-          <p><strong>Тип топлива:</strong> {{ car?.fuel }}</p>
-          <p><strong>Описание:</strong> {{ car?.description }}</p>
-          
-          <div v-if="car?.checkboxes.length">
-            <p><strong>Опции:</strong></p>
-            <ul class="ml-8">
-              <li v-for="(option, index) in car.checkboxes" :key="index">{{ option }}</li>
-            </ul>
-          </div>
-
-          <p><strong>Доступность:</strong> {{ car?.available ? 'Доступна' : 'Не доступна' }}</p>
-        </div>
-
-        <!-- Рейтинг и информация о компании -->
-        
-        <v-divider vertical class="mx-5"></v-divider>
-
-        <div class="mb-4">
-          <h3>Описание</h3>
-          <div>
-            {{ car?.description }}
-          </div>
-          <h3 class="mt-3">О компании:</h3>
-          <div class="d-flex align-center mb-4">
-          <v-icon color="yellow">mdi-star</v-icon>
-          <span class="ml-2">{{ companyInfo.rating }} / 5</span>
-          <span class="ml-4">({{ companyInfo.reviewsCount }} отзывов)</span>
-        </div>
-          
-          <p>{{ companyInfo.description }}</p>
-          <p><strong>Контакты:</strong> {{ companyInfo.contact }}</p>
-          <p><strong>Адрес:</strong> {{ companyInfo.location }}</p>
-        </div>
-        </div>
-
-        <v-carousel show-arrows :show-indicators="false" class="mt-3">
-          <v-carousel-item v-for="(image, index) in car?.images" :key="index">
-            <v-img 
-              :src="image" 
-              alt="Car image" 
-              aspect-ratio="16/9" 
-              cover
-              :lazy="false" 
-            />
-          </v-carousel-item>
-        </v-carousel>
-      </v-card-text>
+        <v-row>
+          <v-col cols="12" md="12">
+            <v-row>
+              <v-col cols="12" md="12" v-if="car?.description">
+                <h4 class="text-h6">Описание</h4>
+                <strong>{{ car?.description }}</strong>
+              </v-col>
+              <v-col cols="12" md="12" v-if="car?.checkboxes?.length">
+                <v-chip-group column>
+                  <v-chip v-for="(option, index) in car?.checkboxes" :key="index" class="ma-1">
+                    {{ option }}
+                  </v-chip>
+                </v-chip-group>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+    </v-card-text>
     </v-card>
   </v-container>
 </template>

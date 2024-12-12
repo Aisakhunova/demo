@@ -111,7 +111,7 @@ const handleFileChange = (event) => {
 };
 
 const isStep1Valid = computed(() => form.value.city && form.value.type && form.value.partner);
-const isStep2Valid = computed(() => form.value.model && form.value.priceDay && form.value.priceWeek && form.value.priceMonth && form.value.year && form.value.engineType && form.value.transmission && form.value.fuel && form.value.cityFuel && form.value.highwayFuel && form.value.combinedFuel);
+const isStep2Valid = computed(() => form.value.model && form.value.priceDay && form.value.priceWeek && form.value.priceMonth && form.value.year && form.value.engineType && form.value.transmission && form.value.fuel && fuelValidation(form.value.cityFuel) && fuelValidation(form.value.highwayFuel) && fuelValidation(form.value.combinedFuel))
 const isStep3Valid = computed(() => form.value.description && form.value.checkboxes.length > 0);
 const isStep4Valid = computed(() => form.value.images.length > 0);
 
@@ -123,6 +123,14 @@ const canMoveToNextStep = computed(() => {
 });
 
 const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
+
+const fuelValidation = (value) => {
+  if (value === '' || value === null) return true; // Поле необязательное
+  const numValue = parseFloat(value);
+  return numValue >= 0 && numValue <= 10;
+};
+
+
 </script>
 
 <template>
@@ -141,13 +149,13 @@ const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
           <v-text-field v-model="form.priceDay" label="Цена в день" type="number" />
           <v-text-field v-model="form.priceWeek" label="Цена в неделю" type="number" />
           <v-text-field v-model="form.priceMonth" label="Цена в месяц" type="number" />
-          <v-text-field v-model="form.cityFuel" label="Расход топлива в городе" type="number" />
-          <v-text-field v-model="form.highwayFuel" label="Расход топлива на шоссе" type="number" />
-          <v-text-field v-model="form.combinedFuel" label="Расход топлива в смешенной местности" type="number" />
+          <v-text-field v-model="form.cityFuel" label="Расход топлива в городе" type="number" :rules="[v => fuelValidation(v) || 'Введите значение от 0 до 10']" />
+          <v-text-field v-model="form.highwayFuel" label="Расход топлива на шоссе" type="number" ::rules="[v => fuelValidation(v) || 'Введите значение от 0 до 10']"/>
+          <v-text-field v-model="form.combinedFuel" label="Расход топлива в смешенной местности" type="number" :rules="[v => fuelValidation(v) || 'Введите значение от 0 до 10']"/>
           <v-text-field v-model="form.year" label="Год" type="number" />
-          <v-text-field v-model="form.engineType" label="Тип двигателя" />
-          <v-text-field v-model="form.transmission" label="Трансмиссия" />
-          <v-text-field v-model="form.fuel" label="Топливо" />
+          <v-text-field v-model="form.engineType" label="Объем двигателя" type="number" />
+          <v-select v-model="form.transmission" :items="['Автомат', 'Ручная']" label="Трансмиссия" />
+          <v-select v-model="form.fuel" :items="['Дизель', 'Бензин', 'Гибрид', 'Электричка']" label="Топливо" />
         </div>
 
         <div v-if="currentStep === 3">
