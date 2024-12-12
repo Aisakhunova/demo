@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useCarsStore } from '../../store/cars';
+import { useCarsStore } from '../../stores/cars';
 import CarCard from '../../components/CarCard.vue';
 
 const carsStore = useCarsStore();
@@ -183,7 +183,7 @@ const filteredCars = computed(() => {
     </v-row>
 
     <v-row>
-      <v-col v-for="car in filteredCars" :key="car.id" cols="12" md="3">
+      <v-col v-for="car in filteredCars" :key="car.id" cols="12" md="4">
         <CarCard :car="car" />
       </v-col>
     </v-row>
@@ -205,3 +205,4 @@ const filteredCars = computed(() => {
 
 
 
+../../stores/cars

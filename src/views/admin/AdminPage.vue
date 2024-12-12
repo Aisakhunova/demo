@@ -1,5 +1,5 @@
 <script setup>
-import { useCarsStore } from '../../store/cars';
+import { useCarsStore } from '../../stores/cars';
 import CarCard from '../../components/CarCard.vue';
 import AdminForm from './AdminForm.vue';
 import { ref, computed, onMounted } from 'vue';
@@ -112,7 +112,7 @@ onMounted(() => {
         </v-card>
       </v-col>
 
-      <v-dialog v-model="carDetailsDialog" max-width="500" max-height="750">
+      <v-dialog v-model="carDetailsDialog" class="responsive-dialog">
         <v-card>
           <v-card-text v-if="selectedCar">
             <v-row>
@@ -164,16 +164,16 @@ onMounted(() => {
               </v-col>
 
               <v-col cols="12">
-                <v-carousel show-arrows height="300">
-                  <v-carousel-item v-for="(image, index) in selectedCar.images" :key="index">
+                <v-carousel delimiter-icon="mdi-square" show-arrows="hover" class="responsive-dialog-carousel">
+                  <v-carousel-item v-for="(image, index) in selectedCar.images" :key="index" class="fill-height">
                     <v-img :src="image" alt="Car image" cover />
                   </v-carousel-item>
                 </v-carousel>
               </v-col>
-            </v-row>ƒ
+            </v-row>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="error" text @click="carDetailsDialog = false">Закрыть</v-btn>
+            <v-btn color="error" variant="flat" text @click="carDetailsDialog = false">Закрыть</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -181,7 +181,7 @@ onMounted(() => {
 
   <h1 class="py-5">Ваши машины</h1>
     <v-row>
-      <v-col v-for="car in cars" :key="car.id" cols="12" md="3">
+      <v-col v-for="car in cars" :key="car.id" cols="12" md="4">
         <CarCard :car="car" @edit="editCar" @delete="deleteCar" :isAdmin="true"/>
       </v-col>
     </v-row>
@@ -208,5 +208,39 @@ onMounted(() => {
 
 .info-value {
   text-align: right;
+}
+
+.responsive-dialog {
+  max-height: 750px;
+  max-width: 700px;
+}
+
+@media (max-width: 768px) {
+  .responsive-dialog {
+    max-height: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-dialog {
+    max-height: 550px;
+  }
+}
+
+.responsive-dialog-carousel {
+  max-height: 400px;
+
+}
+
+@media (max-width: 768px) {
+  .responsive-dialog-carousel {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-dialog-carousel {
+    max-height: 200px;
+  }
 }
 </style>

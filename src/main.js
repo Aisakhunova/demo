@@ -4,6 +4,7 @@ import { createVuetify } from 'vuetify';
 import 'vuetify/styles'; // Import global styles
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import { setupI18n } from './i18n';
 import '@mdi/font/css/materialdesignicons.css'; 
 
 import {router} from './router';
@@ -23,4 +24,5 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(vuetify);
 app.use(router);
+setupI18n(app)
 app.mount('#app');

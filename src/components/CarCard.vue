@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import RentForm from '../views/home/RentForm.vue';
-import { useCarsStore } from '../store/cars';
+import { useCarsStore } from '../stores/cars';
 
 const props = defineProps({
   car: Object,
@@ -31,32 +31,60 @@ const navigateToCarDetail = () => {
 
 <template>
   <v-card class="card pa-1">
-    <v-card-title>{{ props.car.model }}</v-card-title>
     <v-card-text>
-      <div class="card-desc">
-        <h4>Город: {{ props.car.city }}</h4>
-        <h4>Тип аренды: {{ props.car.type }}</h4>
-        <h4>Цена</h4>
-       <div class="pl-3">
-        <p> {{ props.car.price.day }}$ в день</p>
-        <p>{{ props.car.price.week }}$ в неделю</p>
-        <p>{{ props.car.price.month }}$ в месяц</p>
-       </div>
-       <h4>Расход топлива:</h4>
-       <div class="pl-3">
-        <p>Город: {{ props.car.fuelConsumption.cityFuel }}</p>
-        <p>Шоссе: {{ props.car.fuelConsumption.highway }}</p>
-        <p>Смешанный: {{ props.car.fuelConsumption.combined }}</p>
-       </div>
-        <h4>Партнер: {{ props.car.partner }}</h4>
-        <p v-if="car.available" class="success--text">Машина доступна</p>
-        <p v-else class="red--text">
+      
+
+      <v-row class="pb-8">
+        
+
+        <v-col cols="12" md="12">
+          <v-card class="pa-5 card">
+          <h2>{{ props.car.model }}</h2>
+          <h2 class="mb-1">{{ props.car.year }}</h2>
+          <h3 class="text-green">{{ props.car.price.day }}$ /день,</h3>
+          <h3 class="text-green">{{ props.car.price.week }}$ /неделя,</h3>
+          <h3 class="mb-3 text-green">{{ props.car.price.modnth }}$ /месяц</h3>
+          <div class="info-table">
+            <div class="info-row">
+              <div class="info-title"><strong>Город:</strong></div>
+              <div class="info-title"><strong>Партнер</strong></div>
+              <div class="info-title"><strong>Тип двигателя:</strong></div>
+              <div class="info-title"><strong>Трансмиссия:</strong></div>
+              <div class="info-title"><strong>Тип топлива:</strong></div>
+            </div>
+            <div class="info-row">
+              <div class="info-value">{{ props.car.city }}</div>
+              <div class="info-value">{{ props.car.partner }}</div>
+              <div class="info-value">{{ props.car.engineType }}</div>
+              <div class="info-value">{{ props.car.transmission }}</div>
+              <div class="info-value">{{ props.car.fuel }}</div>
+            </div>
+          </div>
+          <v-divider class="mt-6"></v-divider>
+          <h3 class="mt-2">Расход топлива</h3>
+          <div class="info-table">
+            <div class="info-row">
+              <div class="info-title"><strong>Город:</strong></div>
+              <div class="info-title"><strong>Шоссе:</strong></div>
+              <div class="info-title"><strong>Смешанный:</strong></div>
+            </div>
+            <div class="info-row">
+              <div class="info-value">{{ props.car.fuelConsumption.cityFuel }}</div>
+              <div class="info-value">{{ props.car.fuelConsumption.highway }}</div>
+              <div class="info-value">{{ props.car.fuelConsumption.combined }}</div>
+            </div>
+          </div>
+          <h3 v-if="car.available" class="success--text mt-3 mb-5" >Машина доступна</h3>
+        <h3 v-else class="red--text mt-3">
           Забронирована до: 
           {{ carsStore.getCarRentalEndDate(car.id) || 'Нет данных' }}
-        </p>
-      </div>
-      <v-carousel delimiter-icon="mdi-square" show-arrows="hover" height="120">
-        <v-carousel-item v-for="(image, index) in props.car.images" :key="index">
+        </h3>
+          </v-card>
+
+        </v-col>
+      </v-row>
+      <v-carousel delimiter-icon="mdi-square" show-arrows="hover" class="responsive-carousel">
+        <v-carousel-item v-for="(image, index) in props.car.images" :key="index" >
           <v-img :src="image" alt="Car image" aspect-ratio="16/9" cover/>
         </v-carousel-item>
       </v-carousel>
@@ -144,4 +172,21 @@ const navigateToCarDetail = () => {
     gap: 16px;
   }
 }
+
+.responsive-carousel {
+  max-height: 200px;
+}
+
+@media (max-width: 1000px) {
+  .responsive-carousel {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-carousel {
+    max-height: 200px;
+  }
+}
 </style>
+../stores/cars

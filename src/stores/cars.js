@@ -2,10 +2,15 @@ import { defineStore } from "pinia";
 
 export const useCarsStore = defineStore('cars', {
   state: () => ({
+    currentLanguage: 'ru',
     cars: [
       {
         id: 1,
         city: 'Познань',
+        // city: {
+        //   ru: 'Познань',
+        //   en: 'Poznan'
+        // },
         model: 'Toyota Corolla',
         type: 'Курьер',
         price: {

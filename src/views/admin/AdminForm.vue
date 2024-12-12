@@ -1,16 +1,36 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
-import { useCarsStore } from '../../store/cars';
+import { useI18n } from 'vue-i18n';
+import { useCarsStore } from '../../stores/cars';
 
 const props = defineProps({
   car: Object, 
 });
 
 const emit = defineEmits(['close']); 
+const {t} = useI18n()
 
 const carsStore = useCarsStore();
 const show = ref(true);
 const currentStep = ref(1);
+
+const cities = [
+   t('cities.warsaw'),
+   t('cities.krakow'),
+   t('cities.poznan')
+]
+const rentalTypes = [
+    t('rentalTypes.courier'),
+    t('rentalTypes.taxi'),
+    t('rentalTypes.moped'),
+    t('rentalTypes.other')
+]
+const partners = [
+   t('partners.cocaCola'),
+   t('partners.fanta'),
+   t('partners.sprite')
+]
+
 const form = ref({
   city: '',
   type: '',
@@ -102,7 +122,7 @@ const prevStep = () => {
 const handleFileChange = (event) => {
   const files = event.target.files;
   if (files.length + form.value.images.length > 3) {
-    alert('Можно загрузить не более 3 изображений.');
+    alert(t("imageAlert"));
     return;
   }
 
@@ -125,7 +145,7 @@ const canMoveToNextStep = computed(() => {
 const canSave = computed(() => currentStep.value === 4 && isStep4Valid.value);
 
 const fuelValidation = (value) => {
-  if (value === '' || value === null) return true; // Поле необязательное
+  if (value === '' || value === null) return true; 
   const numValue = parseFloat(value);
   return numValue >= 0 && numValue <= 10;
 };
@@ -136,26 +156,26 @@ const fuelValidation = (value) => {
 <template>
   <v-dialog v-model="show" persistent width="500" max-height="700" @click:outside="emit('close')">
     <v-card class="pa-5">
-      <v-card-title>{{ car ? 'Редактировать' : 'Добавить' }} машину</v-card-title>
+      <v-card-title>{{ car ? $t('editCar') : $t('addCar') }}</v-card-title>
       <v-card-text>
         <div v-if="currentStep === 1">
-          <v-select v-model="form.city" :items="['Варшава', 'Краков', 'Познань']" label="Город" />
-          <v-select v-model="form.type" :items="['Курьер', 'Такси', 'Мопед', 'Другое']" label="Тип аренды" />
-          <v-select v-model="form.partner" :items="['Coca Cola', 'Fanta', 'Sprite']" label="Партнер" />
+          <v-select v-model="form.city" :items="cities" :label="$t('city')" />
+          <v-select v-model="form.type" :items="rentalTypes" :label="$t('rentalType')" />
+          <v-select v-model="form.partner" :items="partners" :label="$t('partner')" />
         </div>
 
         <div v-if="currentStep === 2">
-          <v-text-field v-model="form.model" label="Модель" />
-          <v-text-field v-model="form.priceDay" label="Цена в день" type="number" />
-          <v-text-field v-model="form.priceWeek" label="Цена в неделю" type="number" />
-          <v-text-field v-model="form.priceMonth" label="Цена в месяц" type="number" />
-          <v-text-field v-model="form.cityFuel" label="Расход топлива в городе" type="number" :rules="[v => fuelValidation(v) || 'Введите значение от 0 до 10']" />
-          <v-text-field v-model="form.highwayFuel" label="Расход топлива на шоссе" type="number" ::rules="[v => fuelValidation(v) || 'Введите значение от 0 до 10']"/>
-          <v-text-field v-model="form.combinedFuel" label="Расход топлива в смешенной местности" type="number" :rules="[v => fuelValidation(v) || 'Введите значение от 0 до 10']"/>
-          <v-text-field v-model="form.year" label="Год" type="number" />
-          <v-text-field v-model="form.engineType" label="Объем двигателя" type="number" />
-          <v-select v-model="form.transmission" :items="['Автомат', 'Ручная']" label="Трансмиссия" />
-          <v-select v-model="form.fuel" :items="['Дизель', 'Бензин', 'Гибрид', 'Электричка']" label="Топливо" />
+          <v-text-field v-model="form.model" :label="$t('model')" />
+          <v-text-field v-model="form.priceDay" :label="$t('pricePerDay')" type="number" />
+          <v-text-field v-model="form.priceWeek" :label="$t('pricePerWeek')" type="number" />
+          <v-text-field v-model="form.priceMonth" :label="$t('pricePerMonth')" type="number" />
+          <v-text-field v-model="form.cityFuel" :label="$t('cityFuel')" type="number" :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" />
+          <v-text-field v-model="form.highwayFuel" :label="$t('highwayFuel')" type="number" :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" />
+          <v-text-field v-model="form.combinedFuel" :label="$t('combinedFuel')" type="number" :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" />
+          <v-text-field v-model="form.year" :label="$t('year')" type="number" />
+          <v-text-field v-model="form.engineType" :label="$t('engineVolume')" type="number" />
+          <v-select v-model="form.transmission" :items="['Автомат', 'Ручная']" :label="$t('transmission')" />
+          <v-select v-model="form.fuel" :items="['Дизель', 'Бензин', 'Гибрид', 'Электричка']" :label="$t('fuel')" />
         </div>
 
         <div v-if="currentStep === 3">
@@ -197,3 +217,4 @@ const fuelValidation = (value) => {
     </v-card>
   </v-dialog>
 </template>
+../../stores/cars

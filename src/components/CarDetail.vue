@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'; 
-import { useCarsStore } from '../store/cars';
+import { useCarsStore } from '../stores/cars';
 import { ref, onMounted } from 'vue';
 
 const route = useRoute();
@@ -38,14 +38,13 @@ const companyInfo = ref({
       <v-row>
         <v-col cols="12" md="7">
           <div v-if="car">
-            <v-carousel show-arrows :show-indicators="false" class="mt-3">
+            <v-carousel show-arrows :show-indicators="false" class="mt-3 responsive-dialog-carousel">
               <v-carousel-item v-for="(image, index) in car?.images" :key="index">
                 <v-img 
                   :src="image" 
                   alt="Car image" 
                   aspect-ratio="16/9" 
                   cover
-                  class="fill-height"
                   :lazy="false" 
                 />
               </v-carousel-item>

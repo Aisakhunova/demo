@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { useCarsStore } from '../../store/cars'; 
+import { useCarsStore } from '../../stores/cars'; 
 
 const props = defineProps({
   showRentalForm: {
@@ -99,3 +99,4 @@ const toggleRentalForm = () => {
   </v-dialog>
 </template>
 
+../../stores/cars

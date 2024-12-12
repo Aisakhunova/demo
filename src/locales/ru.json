@@ -1,0 +1,47 @@
+{
+    "hello": "Привет",
+    "goodbye": "До свидания",
+    "car": "Автомобиль",
+    "price": "Цена",
+
+    "main": "Главная",
+    "admin": "Панель управления",
+    "rent": "Арендовать",
+    "imageAlert": "Можно загрузить не более 3 изображений.",
+
+    
+    "editCar": "Редактировать машину",
+    "addCar": "Добавить машину",
+    "city": "Город",
+    "cities": {
+      "warsaw": "Варшава",
+      "krakow": "Краков",
+      "poznan": "Познань"
+    },
+    "rentalType": "Тип аренды",
+    "rentalTypes": {
+      "courier": "Курьер",
+      "taxi": "Такси",
+      "moped": "Мопед",
+      "other": "Другое"
+    },
+    "partner": "Партнер",
+    "partners": {
+      "cocaCola": "Coca Cola",
+      "fanta": "Fanta",
+      "sprite": "Sprite"
+    },
+    "model": "Модель",
+    "pricePerDay": "Цена в день",
+    "pricePerWeek": "Цена в неделю",
+    "pricePerMonth": "Цена в месяц",
+    "cityFuel": "Расход топлива в городе",
+    "highwayFuel": "Расход топлива на шоссе",
+    "combinedFuel": "Расход топлива в смешенной местности",
+    "year": "Год",
+    "engineVolume": "Объем двигателя",
+    "transmission": "Трансмиссия",
+    "fuel": "Топливо",
+    "fuelValidationMessage": "Введите значение от 0 до 10"
+  }
+  

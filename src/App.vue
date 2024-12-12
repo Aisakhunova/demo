@@ -1,12 +1,14 @@
 <script>
+import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
 
 export default {
   setup() {
+    const { t } = useI18n(); // получаем функцию t для перевода
     const drawer = ref(false);
     const menuItems = [
-      { title: 'Главная', to: '/' },
-      { title: 'Панель управления', to: '/admin' },
+      { title: t('main'), to: '/' },
+      { title: t('admin'), to: '/admin' },
     ];
 
     const toggleDrawer = () => {
