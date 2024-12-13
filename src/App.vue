@@ -1,14 +1,13 @@
 <script>
 import { useI18n } from 'vue-i18n';
 import { ref, computed, onMounted } from 'vue';
-import eventBus from './eventBus'; // Импортируем Event Bus
+import eventBus from './eventBus';
 
 export default {
   setup() {
-    const { t, i18n } = useI18n(); // Извлекаем t и i18n через useI18n
+    const { t, i18n } = useI18n();
     const drawer = ref(false);
 
-    // Используем computed для реактивного изменения menuItems при изменении локали
     const menuItems = computed(() => [
       { title: t('main'), to: '/' },
       { title: t('admin'), to: '/admin' },
@@ -18,18 +17,16 @@ export default {
       drawer.value = !drawer.value;
     };
 
-    // Функция для смены локали
     const setLocale = (newLocale) => {
-      console.log(`Setting locale to: ${newLocale}`); // Логируем изменение локали
-      eventBus.emit('change-locale', newLocale); // Отправляем событие смены локали
+      console.log(`Setting locale to: ${newLocale}`);
+      eventBus.emit('change-locale', newLocale);
     };
 
-    // Слушаем событие смены локали и обновляем i18n
     onMounted(() => {
       eventBus.on('change-locale', (newLocale) => {
         console.log(`Received locale change event: ${newLocale}`);
         if (i18n && i18n.global) {
-          i18n.global.locale = newLocale; // Обновляем локаль через i18n
+          i18n.global.locale = newLocale;
         } else {
           console.error('i18n или i18n.global не инициализировано');
         }
@@ -51,10 +48,19 @@ export default {
     <v-app-bar app class="appBar">
       <v-app-bar-nav-icon @click="toggleDrawer" prepend-icon="square_foot" />
       <v-toolbar-title>Car Sharing Demo </v-toolbar-title>
-      <div class="locale-changer">
-        <select v-model="$i18n.locale">
-          <option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
-        </select>
+      <div class="locale-changer mr-9">
+        <!-- Using v-select for a nicer dropdown experience -->
+        <v-select
+          v-model="$i18n.locale"
+          :items="$i18n.availableLocales"
+          item-text="locale"
+          item-value="locale"
+          class="language-select"
+          dense
+          outlined
+          hide-details
+          @change="setLocale($i18n.locale)"
+        />
       </div>
     </v-app-bar>
 
@@ -80,6 +86,12 @@ export default {
 .v-toolbar__content,
 .v-navigation-drawer__content {
   background-color: rgba(23, 21, 31, 0.649);
+  color: white;
+}
+
+.language-select {
+  width: 200px;
+  max-width: 100%;
   color: white;
 }
 </style>

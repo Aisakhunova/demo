@@ -136,7 +136,7 @@ const filteredCars = computed(() => {
 <template>
   <v-container class="wrapper">
     <v-btn
-      class="d-md-none"
+      class="d-md-none py-7"
       block
       color="primary"
       @click="isNavigationOpen = !isNavigationOpen"
