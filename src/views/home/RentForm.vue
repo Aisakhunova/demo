@@ -18,7 +18,7 @@ const props = defineProps({
 
 const renterNames = {
   ru: "Дмитрий Нагиев",
-  en: "Ann Hadson"
+  en: "Dmitry Nagiev"
 }
 
 const emit = defineEmits(['toggleRentalForm', 'submitRentalForm']);
@@ -51,7 +51,10 @@ const submitRentalForm = () => {
   const rides = 150; 
 
   const requestBody = {
-    renterName: renterName.value,
+    renterName: {
+      ru: renterNames.ru,
+      en: renterNames.en
+    },
     rentalStartDate: rentalStartDate.value,
     rentalEndDate: rentalEndDate.value,
     approved: false,
