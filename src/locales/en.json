@@ -111,7 +111,9 @@
     "transmissionTypes":{
       "auto": "Auto",
       "manual": "Manual"
-    }
+    },
+
+    "filters": "Filters"
 
 
 
