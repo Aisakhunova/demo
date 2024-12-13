@@ -3,7 +3,7 @@ import { ref, watch } from 'vue';
 import { useCarsStore } from '../../stores/cars'; 
 import { useI18n } from 'vue-i18n';
 
-const {t} = useI18n()
+const {t, locale} = useI18n()
 
 const props = defineProps({
   showRentalForm: {
@@ -16,10 +16,15 @@ const props = defineProps({
   }
 });
 
+const renterNames = {
+  ru: "Дмитрий Нагиев",
+  en: "Ann Hadson"
+}
+
 const emit = defineEmits(['toggleRentalForm', 'submitRentalForm']);
 const store = useCarsStore(); 
 
-const renterName = ref(t('renter1'));
+const renterName = ref(renterNames[locale.value]);
 const rentalStartDate = ref('');
 const rentalEndDate = ref('');
 const isOpen = ref(false)
@@ -31,6 +36,10 @@ watch(() => props.showRentalForm, (newValue) => {
     isOpen.value = false
   }
 })
+
+watch(locale, (newLocale) => {
+  renterName.value = renterNames[locale.value]
+});
 
 const submitRentalForm = () => {
   if (!renterName.value || !rentalStartDate.value || !rentalEndDate.value) {
