@@ -48,14 +48,15 @@ export default {
     <v-app-bar app class="appBar">
       <v-app-bar-nav-icon @click="toggleDrawer" prepend-icon="square_foot" />
       <v-toolbar-title>Car Sharing Demo </v-toolbar-title>
-      <div class="locale-changer mr-9">
+      <div class="locale-changer" >
         <!-- Using v-select for a nicer dropdown experience -->
         <v-select
           v-model="$i18n.locale"
           :items="$i18n.availableLocales"
           item-text="locale"
           item-value="locale"
-          class="language-select"
+          class="language-select mr-3"
+          width="120"
           dense
           outlined
           hide-details
