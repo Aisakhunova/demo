@@ -38,10 +38,80 @@
     "cityFuel": "Расход топлива в городе",
     "highwayFuel": "Расход топлива на шоссе",
     "combinedFuel": "Расход топлива в смешенной местности",
-    "year": "Год",
+    "year": "Год выпуска",
     "engineVolume": "Объем двигателя",
     "transmission": "Трансмиссия",
     "fuel": "Топливо",
-    "fuelValidationMessage": "Введите значение от 0 до 10"
-  }
+    "fuelValidationMessage": "Введите значение от 0 до 10",
+    "description": "Описание",
+    "uploadPhotos": "Загрузить фото",
+    "back": "Назад",
+    "next": "Далее",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+
+    "rentFor": "Аренда для",
+    "approved": "одобрена",
+    "rentError": "Ошибка при одобрении аренды:",
+    "tryAgain": "Произошла ошибка. Попробуйте снова.",
+    "rejected": "отклонена",
+
+    "rentError2": "Ошибка при отклонении аренды:",
+    "yourRequests": "Ваши Заявки",
+    "rides": "поездок",
+
+    "rentStart": "Дата начала аренды",
+    "rentEnd": "Дата окончания аренды",
+    "status": "Статус",
+    "car2": "Машина",
+    "approve": "Одобрить",
+    "reject": "Отклонить",
+    "day": "день",
+    "week": "неделя",
+    "month": "месяц",
+    "fuelType": "Тип топлива",
+    "close": "Закрыть",
+
+    "yourCars": "Ваши машины",
+
+
+    "priceRange": "Диапазон цен",
+    "priceFor": "Цена за",
+    "rentType": "Тип аренды",
+    "fuelConsumption": "Расход топлива",
+    "consumptionType": "Тип расхода",
+
+    "renter1": "Александр Александров",
+    "fillAll": "Пожалуйста, заполните все поля",
+    "rentalForm": "Форма аренды",
+    "renterName": "Имя арендатора",
+    "send": "Отправить",
+
+    "rentFormSent": "Форма аренды отправлена",
+
+
+    "carIsAvailable": "Машина доступна",
+    "orderedUntill": "Забронирована до",
+    "noData": "Нет данных",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "more": "Подробнее",
+
+    "author": "Автор объявления",
+    "reviews": "отзывов",
+    "approved2": "Одобрено",
+    "pending": "Ожидает одобрения",
+    "fuelTypes": {
+      "petrol": "Бензин",
+      "diesel": "Дизель",
+      "hybrid": "Гибрид",
+      "electro": "Электричка"
+    },
+
+    "transmissionTypes":{
+      "auto": "Автомат",
+      "manual": "Ручная"
+    }
+
+}
   

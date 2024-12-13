@@ -1,9 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useCarsStore } from '../../stores/cars';
 import CarCard from '../../components/CarCard.vue';
+import { useI18n } from 'vue-i18n';
 
 const carsStore = useCarsStore();
+const {t, locale} = useI18n()
+const isNavigationOpen = ref(false)
 
 const isFilterOpen = ref({
   city: false,
@@ -16,51 +19,110 @@ const toggleFilter = (filter) => {
   isFilterOpen.value[filter] = !isFilterOpen.value[filter];
 };
 
-const searchCity = ref('Варшава');
+const searchCity = ref(t('cities.warsaw'));
 const searchModel = ref('');
 const searchPartner = ref('')
 const priceRange = ref([0, 500]); 
 const pricePeriod = ref('day'); 
 const consumptionRange = ref([0, 10])
-const consumptionType = ref('cityFuel')
+const consumptionType = ref(t('cityFuel'))
 const searchType = ref('')
 
 const pricePeriods = [
-  { title: 'День', value: 'day' },
-  { title: 'Неделя', value: 'week' },
-  { title: 'Месяц', value: 'month' },
+  { en: "day", ru: "день", value: 'day' },
+  { en: "week", ru: "неделя", value: 'week' },
+  { en: "month", ru: "месяц", value: 'month' }
 ];
 
 const consumptionTypes = [
-  { title: 'Город', value: 'cityFuel' },
-  { title: 'Шоссе', value: 'highway' },
-  { title: 'Смешанный', value: 'combined' },
+  { en: "Fuel consumption in the city", ru: "Расход топлива в городе", value: 'cityFuel' },
+  { en: "Fuel consumption on the highway", ru: "Расход топлива на шоссе", value: 'highwayFuel' },
+  { en: "Fuel consumption in combined terrain", ru: "Расход топлива в смешенной местности", value: 'combinedFuel' }
 ];
 
-const cities = ['Краков', 'Варшава', 'Познань'];
+const cities = [
+  { en: "Warsaw", ru: "Варшава" },
+  { en: "Krakow", ru: "Краков" },
+  { en: "Poznan", ru: "Познань" }
+]
+
+const localizedCities = computed(() =>
+  cities.map(city => city[locale.value])
+);
+
+const localizedPricePeriods = computed(() =>
+  pricePeriods.map(item => item[locale.value])
+);
+
+const localizedConsumptionTypes = computed(() =>
+  consumptionTypes.map(item => item[locale.value])
+);
+
+watch(locale, (newLocale) => {
+  if (searchCity.value) {
+    const cityMatch = cities.find(
+      (item) => item[locale.value === 'en' ? 'ru' : 'en'] === searchCity.value
+    );
+    const pricePeriodMatch = pricePeriods.find(
+      (item) => item[locale.value === 'en' ? 'ru' : 'en'] === pricePeriod.value
+    );
+    const consumptionTypeMatch = consumptionTypes.find(
+      (item) => item[locale.value === 'en' ? 'ru' : 'en'] === consumptionType.value
+    );
+    const typeMatch = types.find(
+      (item) => item[locale.value === 'en' ? 'ru' : 'en'] === searchType.value
+    );
+
+    if (cityMatch) {
+      searchCity.value = cityMatch[locale.value];
+    }
+    if (pricePeriodMatch) {
+      pricePeriod.value = pricePeriodMatch[locale.value];
+    }
+    if (consumptionTypeMatch) {
+      consumptionType.value = consumptionTypeMatch[locale.value];
+    }
+    if (typeMatch) {
+      searchType.value = typeMatch[locale.value];
+    }
+  }
+});
+
+
 const models = ['BMW', 'Tesla', 'Ford', 'Honda', 'Toyota', 'Chevrolet' ];
 const partners = ['Coca Cola', 'Fanta', 'Sprite'];
-const types = ['Такси', 'Курьер', 'Мопед', 'Другое']
+
+const types = [
+  { en: "Courier", ru: "Курьер" },
+  { en: "Taxi", ru: "Такси" },
+  { en: "Bike", ru: "Мопед" },
+  { en: "Other", ru: "Другое" },
+]
+
+const localizedTypes = computed(() =>
+  types.map(item => item[locale.value])
+);
 
 const filteredCars = computed(() => {
   return carsStore.cars.filter((car) => {
-    console.log("car check - ", car)
-    console.log('vallllll', searchCity.value);
-    const carPrice = car.price[pricePeriod.value]; 
-    const consumption = car.fuelConsumption[consumptionType.value]; 
+    const carPrice1 = pricePeriods.find(item => item[locale.value] === pricePeriod.value); 
+    const cons1 = consumptionTypes.find(item => item[locale.value] === consumptionType.value); 
+    const carPrice = car.price[carPrice1['en']]
+    const cons = car.fuelConsumption[cons1.value]
+
     const matchesCity = searchCity.value
-      ? car.city.toLowerCase().includes(searchCity.value.toLowerCase())
+      ? car.city[locale.value].toLowerCase().includes(searchCity.value.toLowerCase())
       : true;
     const matchesModel = searchModel.value
       ? car.model.toLowerCase().includes(searchModel.value.toLowerCase())
       : true;
     const matchesType = searchType.value
-      ? car.type.toLowerCase().includes(searchType.value.toLowerCase())
+      ? car.type[locale.value].toLowerCase().includes(searchType.value.toLowerCase())
       : true;
     const matchesPrice =
       carPrice >= priceRange.value[0] && carPrice <= priceRange.value[1];
     const matchesConsumption =
-      consumption >= consumptionRange.value[0] && consumption <= consumptionRange.value[1];
+      cons >= consumptionRange.value[0] && cons <= consumptionRange.value[1];
     const matchesPartner = searchPartner.value
       ? car.partner.toLowerCase().includes(searchPartner.value.toLowerCase())
       : true;
@@ -68,125 +130,139 @@ const filteredCars = computed(() => {
     return matchesCity && matchesModel && matchesPrice && matchesPartner && matchesConsumption && matchesType;
   });
 });
+
 </script>
 
 <template>
   <v-container class="wrapper">
-    <v-row>
-      <v-col cols="12" md="2" class="mb-2 pb-0">
-        <v-select
-          v-model="searchCity"
-          :items="cities"
-          label="Город"
-          outlined
-          clearable
-          dense
-        />
-      </v-col>
+    <v-btn
+      class="d-md-none"
+      block
+      color="primary"
+      @click="isNavigationOpen = !isNavigationOpen"
+    >
+      {{ $t('filters') }}
+      <v-icon>mdi-filter-variant</v-icon>
+    </v-btn>
 
-      <v-col cols="12" md="2" class="mb-0 pb-0">
-        <v-select
-          v-model="searchModel"
-          :items="models"
-          label="Модель"
-          outlined
-          clearable
-          dense
-        />
-      </v-col>
+    <v-expand-transition>
+      <div v-if="isNavigationOpen || !$vuetify.display.mobile" class="filters-container">
+        <v-card flat outlined >
+          <v-row>
+            <v-col cols="12" md="2" class="mb-2 pb-0">
+              <v-select
+                v-model="searchCity"
+                :items="localizedCities"
+                :label="$t('city')"
+                outlined
+                clearable
+                dense
+              />
+            </v-col>
 
-      <v-col cols="12" md="8">
-        <v-btn
-          class="filter-toggle"
-          block
-          text
-          @click="toggleFilter('price')"
-        >
-          Цена
-          <v-icon>{{ isFilterOpen.price ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-        </v-btn>
-        <v-slide-y-transition>
-          <div v-if="isFilterOpen.price" class="filter-content">
-            <div class="text-end">{{ priceRange[0] }} ₽ - {{ priceRange[1] }} ₽</div>
-            <v-range-slider
-              v-model="priceRange"
-              :min="0"
-              :max="500"
-              label="Диапазон цен"
-              :step="5"
-              outlined
-              ticks
-            />
-            <v-select
-              v-model="pricePeriod"
-              :items="pricePeriods"
-              label="Цена за"
-              outlined
-            />
-          </div>
-        </v-slide-y-transition>
-      </v-col>
+            <v-col cols="12" md="2" class="mb-0 pb-0">
+              <v-select
+                v-model="searchModel"
+                :items="models"
+                :label="$t('model')"
+                outlined
+                clearable
+                dense
+              />
+            </v-col>
 
-      <v-col cols="12" md="2" class="mb-0 pb-0" >
-        <v-select
-          v-model="searchType"
-          :items="types"
-          label="Тип аренды"
-          outlined
-          clearable
-          dense
-        />
-      </v-col>
+            <v-col cols="12" md="8">
+              <v-btn
+                class="filter-toggle"
+                block
+                text
+                @click="toggleFilter('price')"
+              >
+              {{ $t('price') }}
+                <v-icon>{{ isFilterOpen.price ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+              </v-btn>
+                <div v-if="isFilterOpen.price" class="filter-content">
+                  <div class="text-end">{{ priceRange[0] }} ₽ - {{ priceRange[1] }} ₽</div>
+                  <v-range-slider
+                    v-model="priceRange"
+                    :min="0"
+                    :max="500"
+                    :label="$t('priceRange')"
+                    :step="5"
+                    outlined
+                    ticks
+                  />
+                  <v-select
+                    v-model="pricePeriod"
+                    :items="localizedPricePeriods"
+                    :label="$t('priceFor')"
+                    outlined
+                  />
+                </div>
+              </v-col>
 
-      <v-col cols="12" md="2" class="mb-0 pb-0" >
-        <v-select
-          v-model="searchPartner"
-          :items="partners"
-          label="Партнер"
-          outlined
-          clearable
-          dense
-        />
-      </v-col>
+              <v-col cols="12" md="2" class="mb-0 pb-0" >
+                <v-select
+                  v-model="searchType"
+                  :items="localizedTypes"
+                  :label="$t('rentType')"
+                  outlined
+                  clearable
+                  dense
+                />
+              </v-col>
 
-      <v-col cols="12" md="8">
-        <v-btn
-          class="filter-toggle"
-          block
-          text
-          @click="toggleFilter('consumption')"
-        >
-          Расход топлива
-          <v-icon>{{ isFilterOpen.consumption ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-        </v-btn>
-        <v-slide-y-transition>
-          <div v-if="isFilterOpen.consumption" class="filter-content">
-            <div class="text-end">{{ consumptionRange[0] }} - {{ consumptionRange[1] }} </div>
-            <v-range-slider
-              v-model="consumptionRange"
-              :min="0"
-              :max="10"
-              label="Расход топлива"
-              :step="0.1"
-              outlined
-              ticks
-            />
-            <v-select
-              v-model="consumptionType"
-              :items="consumptionTypes"
-              label="Тип расхода"
-              outlined
-            />
-          </div>
-        </v-slide-y-transition>
-      </v-col>
-    </v-row>
+              <v-col cols="12" md="2" class="mb-0 pb-0" >
+                <v-select
+                  v-model="searchPartner"
+                  :items="partners"
+                  :label="$t('partner')"
+                  outlined
+                  clearable
+                  dense
+                />
+              </v-col>
 
-    <v-row>
+              <v-col cols="12" md="8">
+                <v-btn
+                  class="filter-toggle"
+                  block
+                  text
+                  @click="toggleFilter('consumption')"
+                >
+                  {{ t('fuelConsumption') }}
+                  <v-icon>{{ isFilterOpen.consumption ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                </v-btn>
+                  <div v-if="isFilterOpen.consumption" class="filter-content">
+                    <div class="text-end">{{ consumptionRange[0] }} - {{ consumptionRange[1] }} </div>
+                    <v-range-slider
+                      v-model="consumptionRange"
+                      :min="0"
+                      :max="10"
+                      :label="$t('fuelConsumption')"
+                      :step="0.1"
+                      outlined
+                      ticks
+                    />
+                    <v-select
+                      v-model="consumptionType"
+                      :items="localizedConsumptionTypes"
+                      :label="$t('consumptionType')"
+                      outlined
+                    />
+                  </div>
+              </v-col>
+            </v-row>
+          </v-card>
+        </div>
+    </v-expand-transition>
+
+    <v-row class="mt-7">
       <v-col v-for="car in filteredCars" :key="car.id" cols="12" md="4">
         <CarCard :car="car" />
       </v-col>
     </v-row>
+
   </v-container>
 </template>
 
@@ -201,8 +277,14 @@ const filteredCars = computed(() => {
   border-radius: 4px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+.filters-container {
+  background: white;
+  border-bottom: 1px solid #ccc;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative; 
+  z-index: 10;
+}
+
 </style>
-
-
-
-../../stores/cars

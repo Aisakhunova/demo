@@ -3,6 +3,9 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import RentForm from '../views/home/RentForm.vue';
 import { useCarsStore } from '../stores/cars';
+import { useI18n } from 'vue-i18n';
+
+const {t, locale} = useI18n()
 
 const props = defineProps({
   car: Object,
@@ -21,52 +24,51 @@ const toggleRentalForm = () => {
 };
 
 const handleRentalSubmit = (rentalData) => {
-  console.log('Форма аренды отправлена', rentalData);
+  console.log(t('rentFormSent'), rentalData);
 };
 
 const navigateToCarDetail = () => {
   router.push({ name: 'car-detail', params: { carId: props.car.id } });
 };
+
 </script>
 
 <template>
-  <v-card class="card pa-1">
+  <v-card class="card pa-1" @click="navigateToCarDetail">
     <v-card-text>
-      
-
       <v-row class="pb-8">
-        
-
         <v-col cols="12" md="12">
           <v-card class="pa-5 card">
           <h2>{{ props.car.model }}</h2>
           <h2 class="mb-1">{{ props.car.year }}</h2>
-          <h3 class="text-green">{{ props.car.price.day }}$ /день,</h3>
-          <h3 class="text-green">{{ props.car.price.week }}$ /неделя,</h3>
-          <h3 class="mb-3 text-green">{{ props.car.price.modnth }}$ /месяц</h3>
+          <h3 class="text-green">{{ props.car.price.day }} zł/{{ $t('day') }},</h3>
+          <h3 class="text-green">{{ props.car.price.week }} zł/{{ $t('week') }},</h3>
+          <h3 class="mb-3 text-green">{{ props.car.price.month }} zł/{{ $t('month') }}</h3>
+          
           <div class="info-table">
             <div class="info-row">
-              <div class="info-title"><strong>Город:</strong></div>
-              <div class="info-title"><strong>Партнер</strong></div>
-              <div class="info-title"><strong>Тип двигателя:</strong></div>
-              <div class="info-title"><strong>Трансмиссия:</strong></div>
-              <div class="info-title"><strong>Тип топлива:</strong></div>
+              <div class="info-title"><strong>{{ $t('rentType') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('city') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('partner') }}</strong></div>
+              <div class="info-title"><strong>{{ $t('engineVolume') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('transmission') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('fuelType') }}:</strong></div>
             </div>
             <div class="info-row">
-              <div class="info-value">{{ props.car.city }}</div>
+              <div class="info-value">{{ props.car.type[locale]}}</div>
+              <div class="info-value">{{ props.car.city[locale]}}</div>
               <div class="info-value">{{ props.car.partner }}</div>
               <div class="info-value">{{ props.car.engineType }}</div>
-              <div class="info-value">{{ props.car.transmission }}</div>
-              <div class="info-value">{{ props.car.fuel }}</div>
+              <div class="info-value">{{ props.car.transmission[locale] }}</div>
+              <div class="info-value">{{ props.car.fuel[locale] }}</div>
             </div>
           </div>
-          <v-divider class="mt-6"></v-divider>
-          <h3 class="mt-2">Расход топлива</h3>
+          <v-divider class="my-6"></v-divider>
           <div class="info-table">
             <div class="info-row">
-              <div class="info-title"><strong>Город:</strong></div>
-              <div class="info-title"><strong>Шоссе:</strong></div>
-              <div class="info-title"><strong>Смешанный:</strong></div>
+              <div class="info-title"><strong>{{ $t('cityFuel') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('highwayFuel') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('combinedFuel') }}:</strong></div>
             </div>
             <div class="info-row">
               <div class="info-value">{{ props.car.fuelConsumption.cityFuel }}</div>
@@ -74,10 +76,10 @@ const navigateToCarDetail = () => {
               <div class="info-value">{{ props.car.fuelConsumption.combined }}</div>
             </div>
           </div>
-          <h3 v-if="car.available" class="success--text mt-3 mb-5" >Машина доступна</h3>
+          <h3 v-if="car.available" class="success--text mt-3 mb-5" >{{ $t('carIsAvailable') }}</h3>
         <h3 v-else class="red--text mt-3">
-          Забронирована до: 
-          {{ carsStore.getCarRentalEndDate(car.id) || 'Нет данных' }}
+          {{ $t('orderedUntill') }}: 
+          {{ carsStore.getCarRentalEndDate(car.id) || $t('noData') }}
         </h3>
           </v-card>
 
@@ -92,26 +94,39 @@ const navigateToCarDetail = () => {
 
     <div v-if="props.isAdmin" class="px-2">
       <div >
-        <v-btn color="green" variant="flat" @click="$emit('edit', car)" width="100%">Редактировать</v-btn>
+        <v-btn 
+          color="grey" 
+          variant="flat" 
+          @click.stop="$emit('edit', car)" 
+          width="100%"
+          >
+            {{ $t('edit') }}
+        </v-btn>
       </div>
       <div>
-        <v-btn theme="red" color="error" variant="flat" @click="$emit('delete', car.id)" width="100%" class="mt-1">Удалить</v-btn>
+        <v-btn 
+          theme="red" 
+          color="black" 
+          variant="flat" 
+          @click.stop="$emit('delete', car.id)" 
+          width="100%"
+          class="mt-1"
+        >
+          {{ $t('delete') }}
+        </v-btn>
       </div>
     </div>
 
     <div v-else class="px-2">
       <v-btn 
         :class="car.available ? 'success--text' : 'red--text'" 
-        @click="toggleRentalForm" variant="flat" 
+        @click.stop="toggleRentalForm" variant="flat" 
         :disabled="!car.available"
         width="100%"
         color="green"
       >
-        Арендовать
+        {{ $t('rent') }}
       </v-btn>
-    </div>
-    <div class="px-2">
-      <v-btn theme="grey" color="grey" variant="flat" @click="navigateToCarDetail" width="100%" class="mt-1 ">Подробнее</v-btn>
     </div>
   </v-card>
   <RentForm

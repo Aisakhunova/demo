@@ -1,7 +1,119 @@
 {
-    "hello": "Hello",
-    "goodbye": "Goodbye",
-    "car": "Car",
-    "price": "Price"
+    "hello": "Привет",
+    "goodbye": "До свидания",
+    "car": "A car",
+    "price": "Price",
+
+    "main": "Main",
+    "admin": "Admin Page",
+    "rent": "To rent",
+    "imageAlert": "You can upload not more that 3 images",
+
+    
+    "editCar": "Edit a car",
+    "addCar": "Add a car",
+    "city": "City",
+    "cities": {
+      "warsaw": "Warsaw",
+      "krakow": "Krakow",
+      "poznan": "Poznan"
+    },
+    "rentalType": "Тype of rent",
+    "rentalTypes": {
+      "courier": "Courier",
+      "taxi": "Taxi",
+      "moped": "Moped",
+      "other": "Other"
+    },
+    "partner": "Partner",
+    "partners": {
+      "cocaCola": "Coca Cola",
+      "fanta": "Fanta",
+      "sprite": "Sprite"
+    },
+    "model": "Model",
+    "pricePerDay": "Price per day",
+    "pricePerWeek": "Price per week",
+    "pricePerMonth": "Price per month",
+    "cityFuel": "Fuel consumption in the city",
+    "highwayFuel": "Fuel consumption on the highway",
+    "combinedFuel": "Fuel consumption in combined terrain",
+    "year": "Year of production",
+    "engineVolume": "Engine Volume",
+    "transmission": "Transmission",
+    "fuel": "Fuel",
+    "fuelValidationMessage": "Enter values from 0 to 10",
+    "description": "Description",
+    "uploadPhotos": "Upload an image",
+    "back": "Back",
+    "next": "Next",
+    "cancel": "Cancel",
+    "save": "Save",
+
+    "rentFor": "Rent for",
+    "approved": "is approved",
+    "rentError": "Error approving rent",
+    "tryAgain": "Error occured. Try again",
+    "rejected": "is rejected",
+
+    "rentError2": "Error rejecting rent",
+    "yourRequests": "Your Requests",
+    "rides": "rides",
+
+    "rentStart": "Rental start date",
+    "rentEnd": "Rental end Date",
+    "status": "Status",
+    "car2": "Car",
+    "approve": "Approve",
+    "reject": "Reject",
+    "day": "day",
+    "week": "week",
+    "month": "month",
+    "fuelType": "Fuel Type",
+    "close": "Close",
+
+    "yourCars": "Your cars",
+
+
+    "priceRange": "Price range",
+    "priceFor": "Price for",
+    "rentType": "Rental type",
+    "fuelConsumption": "Fuel Consumption",
+    "consumptionType": "Consumption type",
+
+    "renter1": "John Smit",
+    "fillAll": "Please, fill in all fields",
+    "rentalForm": "Rental form",
+    "renterName": "Renter name",
+    "send": "Send",
+
+    "rentFormSent": "Rental form was sent",
+
+
+    "carIsAvailable": "The car is available",
+    "orderedUntill": "The car is reserved until",
+    "noData": "No data available",
+    "edit": "Edit",
+    "delete": "Delete",
+    "more": "More",
+
+    "author": "Author of the ad",
+    "reviews": "reviews",
+    "approved2": "Approved",
+    "pending": "Waiting for approval",
+    "fuelTypes": {
+      "petrol": "Petrol",
+      "diesel": "Diesel",
+      "hybrid": "Hybrid",
+      "electro": "'Electric'"
+    },
+
+    "transmissionTypes":{
+      "auto": "Auto",
+      "manual": "Manual"
+    }
+
+
+
 }
   

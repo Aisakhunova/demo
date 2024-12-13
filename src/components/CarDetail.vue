@@ -2,28 +2,29 @@
 import { useRoute, useRouter } from 'vue-router'; 
 import { useCarsStore } from '../stores/cars';
 import { ref, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const route = useRoute();
 const router = useRouter(); 
 const carId = route.params.carId;
-const car = ref(null);
+const car = ref(null)
+const {t, locale} = useI18n()
 
 const carsStore = useCarsStore();
 
 onMounted(() => {
   car.value = carsStore.getCarById(Number(carId)); 
+  console.log("CAR - ", car.value)
 });
 
 const goBack = () => {
   router.go(-1); 
 };
 
-// Информация о компании
 const companyInfo = ref({
   name: "Car Rentals Ltd.",
   rating: 4.5,
   reviewsCount: 120,
-  description: "Car Rentals Ltd. offers a wide range of vehicles for all your rental needs. Whether you're looking for a luxury ride or an economy car, we have something for you!",
   contact: "+123 456 789",
   location: "123 Main Street, Cityville"
 });
@@ -32,7 +33,7 @@ const companyInfo = ref({
 <template>
   <v-container>
     <v-btn @click="goBack" color="grey" class="mb-3">
-      Назад
+      <v-icon color="black" class="mr-4" >mdi-chevron-left</v-icon>
     </v-btn>
     <v-card class="pa-5">
       <v-row>
@@ -55,26 +56,31 @@ const companyInfo = ref({
         <v-col cols="12" md="5">
           <v-card class="pa-5">
           <h2 class="mb-1">{{ car?.model }} {{ car?.year }}</h2>
-          <h3 class="mb-3 text-green">{{ car?.price.day }}$ /день, {{ car?.price.week }}$ /неделя, {{ car?.price.month }}$ /месяц</h3>
+          <h3 class="text-green">{{ car?.price.day }} zł/{{ $t('day') }},</h3>
+          <h3 class="text-green">{{ car?.price.week }} zł/{{ $t('week') }},</h3>
+          <h3 class="mb-3 text-green">{{ car?.price.month }} zł/{{ $t('month') }}</h3>
           <div class="info-table">
             <div class="info-row">
-              <div class="info-title"><strong>Тип двигателя:</strong></div>
-              <div class="info-title"><strong>Трансмиссия:</strong></div>
-              <div class="info-title"><strong>Тип топлива:</strong></div>
+              <div class="info-title"><strong>{{ $t('rentType') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('city') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('engineVolume') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('transmission') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('fuelType') }}:</strong></div>
             </div>
             <div class="info-row">
+              <div class="info-value">{{ car?.type[locale] }}</div>
+              <div class="info-value">{{ car?.city[locale] }}</div>
               <div class="info-value">{{ car?.engineType }}</div>
-              <div class="info-value">{{ car?.transmission }}</div>
-              <div class="info-value">{{ car?.fuel }}</div>
+              <div class="info-value">{{ car?.transmission[locale] }}</div>
+              <div class="info-value">{{ car?.fuel[locale] }}</div>
             </div>
           </div>
-          <v-divider class="mt-6"></v-divider>
-          <h3 class="mt-2">Расход топлива</h3>
+          <v-divider class="my-6"></v-divider>
           <div class="info-table">
             <div class="info-row">
-              <div class="info-title"><strong>Город:</strong></div>
-              <div class="info-title"><strong>Шоссе:</strong></div>
-              <div class="info-title"><strong>Смешанный:</strong></div>
+              <div class="info-title"><strong>{{ $t('cityFuel') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('highwayFuel') }}:</strong></div>
+              <div class="info-title"><strong>{{ $t('combinedFuel') }}:</strong></div>
             </div>
             <div class="info-row">
               <div class="info-value">{{ car?.fuelConsumption.cityFuel }}</div>
@@ -83,9 +89,27 @@ const companyInfo = ref({
             </div>
           </div>
           </v-card>
-
-          <v-card class="pa-5 mt-5">
-            <h4 class="mb-1">Автор объявления</h4>
+        </v-col>
+      </v-row>
+      <v-row class="d-flex align-baseline">
+        <v-col cols="12" md="7">
+            <v-row>
+              <v-col cols="12" md="12" v-if="car?.description[locale]">
+                <h4 class="text-h6">{{ $t('description') }}</h4>
+                <strong>{{ car?.description[locale] }}</strong>
+              </v-col>
+              <v-col cols="12" md="12" v-if="car?.checkboxes?.length">
+                <v-chip-group column>
+                  <v-chip v-for="(option, index) in car?.checkboxes" :key="index" class="ma-1">
+                    {{ option }}
+                  </v-chip>
+                </v-chip-group>
+              </v-col>
+            </v-row>
+          </v-col>
+       <v-col cols="12" md="5">
+        <v-card class="pa-5 mt-5">
+            <h4 class="mb-1">{{ $t('author') }}</h4>
             <v-row dense>
               <v-col cols="auto">
                 <div class="py-1"><v-icon color="black">mdi-account</v-icon></div>
@@ -100,32 +124,12 @@ const companyInfo = ref({
               <v-col cols="12" md="12">
                 <v-icon color="yellow">mdi-star</v-icon>
                   <span class="ml-2">{{ companyInfo.rating }} / 5</span>
-                  <span class="ml-4">({{ companyInfo.reviewsCount }} отзывов)</span>
+                  <span class="ml-4">({{ companyInfo.reviewsCount }} {{ $t('reviews') }})</span>
               </v-col>
             </v-row>
           </v-card>
-        </v-col>
+       </v-col>
       </v-row>
-      
-      <v-card-text>
-        <v-row>
-          <v-col cols="12" md="12">
-            <v-row>
-              <v-col cols="12" md="12" v-if="car?.description">
-                <h4 class="text-h6">Описание</h4>
-                <strong>{{ car?.description }}</strong>
-              </v-col>
-              <v-col cols="12" md="12" v-if="car?.checkboxes?.length">
-                <v-chip-group column>
-                  <v-chip v-for="(option, index) in car?.checkboxes" :key="index" class="ma-1">
-                    {{ option }}
-                  </v-chip>
-                </v-chip-group>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-    </v-card-text>
     </v-card>
   </v-container>
 </template>

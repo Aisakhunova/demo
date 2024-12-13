@@ -1,6 +1,9 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useCarsStore } from '../../stores/cars'; 
+import { useI18n } from 'vue-i18n';
+
+const {t} = useI18n()
 
 const props = defineProps({
   showRentalForm: {
@@ -16,7 +19,7 @@ const props = defineProps({
 const emit = defineEmits(['toggleRentalForm', 'submitRentalForm']);
 const store = useCarsStore(); 
 
-const renterName = ref('Александр Александров');
+const renterName = ref(t('renter1'));
 const rentalStartDate = ref('');
 const rentalEndDate = ref('');
 const isOpen = ref(false)
@@ -31,7 +34,7 @@ watch(() => props.showRentalForm, (newValue) => {
 
 const submitRentalForm = () => {
   if (!renterName.value || !rentalStartDate.value || !rentalEndDate.value) {
-    alert('Пожалуйста, заполните все поля');
+    alert(t('fillAll'));
     return;
   }
 
@@ -68,35 +71,32 @@ const toggleRentalForm = () => {
 <template>
   <v-dialog v-model="isOpen" max-width="500px" @click:outside="toggleRentalForm">
     <v-card class="pa-5">
-      <v-card-title class="headline">Форма аренды</v-card-title>
+      <v-card-title class="headline">{{ $t('rentalForm') }}</v-card-title>
       <v-card-text>
         <v-form>
           <v-text-field
             v-model="renterName"
-            label="Имя арендатора"
+            :label="$t('renterName')"
             required
             readonly
           />
           <v-text-field
             v-model="rentalStartDate"
-            label="Дата начала аренды"
+            :label="$t('rentStart')"
             type="date"
             required
           />
           <v-text-field
             v-model="rentalEndDate"
-            label="Дата окончания аренды"
+            :label="$t('rentEnd')"
             type="date"
             required
           />
         </v-form>
       </v-card-text>
       <v-card-actions>
-        <v-btn text @click="toggleRentalForm">Отмена</v-btn>
-        <v-btn color="primary" @click="submitRentalForm">Отправить</v-btn>
+        <v-btn color="primary" variant="flat"   @click="submitRentalForm">{{ $t('send') }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
-
-../../stores/cars

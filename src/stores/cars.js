@@ -1,18 +1,21 @@
 import { defineStore } from "pinia";
 
+
 export const useCarsStore = defineStore('cars', {
   state: () => ({
     currentLanguage: 'ru',
     cars: [
       {
         id: 1,
-        city: 'Познань',
-        // city: {
-        //   ru: 'Познань',
-        //   en: 'Poznan'
-        // },
+        city: {
+          ru: 'Познань',
+          en: 'Poznan'
+        },
         model: 'Toyota Corolla',
-        type: 'Курьер',
+        type: {
+          en: 'Courier',
+          ru: 'Курьер'
+        },
         price: {
           day: 10,
           week: 20, 
@@ -25,18 +28,33 @@ export const useCarsStore = defineStore('cars', {
         ],
         year: 2021,
         engineType: 'V4',
-        transmission: 'Automatic',
-        fuel: 'Gasoline',
-        description: 'Reliable sedan for everyday use.',
+        transmission: {
+          en: 'Automatic',
+          ru: 'Автомат'
+        },
+        fuel: {
+          en: 'Petrol',
+          ru: 'Бензин'
+        },
+        description: {
+          en: 'Reliable sedan for everyday use.',
+          ru: 'Надежный седан для повседневного использования.'
+        },
         checkboxes: ['AUX input', 'USB charger'],
         partner: "Coca Cola",
         fuelConsumption: { cityFuel: 7.2, highway: 5.0, combined: 6.0 },
       },
       {
         id: 2,
-        city: 'Краков',
+        city: {
+          ru: 'Краков',
+          en: 'Krakow'
+        },
         model: 'Honda Civic',
-        type: 'Такси',
+        type: {
+          en: 'Taxi',
+          ru: 'Такси'
+        },
         price: {
           day: 10,
           week: 20, 
@@ -49,18 +67,33 @@ export const useCarsStore = defineStore('cars', {
         ],
         year: 2020,
         engineType: 'V4',
-        transmission: 'Manual',
-        fuel: 'Gasoline',
-        description: 'Sporty and fuel-efficient.',
+        transmission: {
+          en: 'Manual',
+          ru: 'Ручная'
+        },
+        fuel: {
+          ru: 'Дизель',
+          en: 'Diesel'
+        },
+        description: {
+          en: 'Sporty and fuel-efficient.',
+          ru: 'Спортивный и экономичный.'
+        },
         checkboxes: ['Backup Camera', 'Bluetooth'],
         partner: "Fanta",
         fuelConsumption: { cityFuel: 5.2, highway: 4.0, combined: 4.7 },
       },
       {
         id: 3,
-        city: 'Варшава',
+        city: {
+          ru: 'Варшава',
+          en: 'Warsaw'
+        },
         model: 'Ford Focus',
-        type: 'Мопед',
+        type: {
+          en: 'Bike',
+          ru: 'Мопед'
+        },
         price: {
           day: 10,
           week: 20, 
@@ -73,18 +106,33 @@ export const useCarsStore = defineStore('cars', {
         ],
         year: 2019,
         engineType: 'V4',
-        transmission: 'Automatic',
-        fuel: 'Diesel',
-        description: 'Compact and stylish with great performance.',
+        transmission: {
+          en: 'Manual',
+          ru: 'Ручная'
+        },
+        fuel: {
+          ru: 'Дизель',
+          en: 'Diesel'
+        },
+        description: {
+          en: 'Compact and stylish with great performance.',
+          ru: 'Компактный и стильный с великолепной производительностью.'
+        },
         checkboxes: ['Heated Seats', 'Apple CarPlay'],
         partner: 'Sprite',
         fuelConsumption: { cityFuel: 6.5, highway: 4.3, combined: 6.6 },
       },
       {
         id: 4,
-        city: 'Краков',
+        city: {
+          ru: 'Краков',
+          en: 'Krakow'
+        },
         model: 'Chevrolet Malibu',
-        type: 'Другое',
+        type: {
+          en: 'Other',
+          ru: 'Другое'
+        },
         price: {
           day: 10,
           week: 20, 
@@ -97,18 +145,33 @@ export const useCarsStore = defineStore('cars', {
         ],
         year: 2022,
         engineType: 'V6',
-        transmission: 'Automatic',
-        fuel: 'Gasoline',
-        description: 'Spacious and comfortable sedan for family trips.',
+        transmission: {
+          en: 'Manual',
+          ru: 'Ручная'
+        },
+        fuel: {
+          en: 'Hybrid',
+          ru: 'Гибридный'
+        },
+        description: {
+          en: 'Spacious and comfortable sedan for family trips.',
+          ru: 'Просторный и комфортабельный седан для семейных поездок.'
+        },
         checkboxes: ['Remote Start', 'Navigation System'],
         partner: "Coca Cola",
         fuelConsumption: { cityFuel: 8.3, highway: 7.0, combined: 8.2 },
       },
       {
         id: 5,
-        city: 'Познань',
+        city: {
+          ru: 'Познань',
+          en: 'Poznan'
+        },
         model: 'Tesla Model 3',
-        type: 'Такси',
+        type: {
+          en: 'Taxi',
+          ru: 'Такси'
+        },
         price: {
           day: 10,
           week: 20, 
@@ -121,18 +184,33 @@ export const useCarsStore = defineStore('cars', {
         ],
         year: 2023,
         engineType: 'Electric',
-        transmission: 'Automatic',
-        fuel: 'Electric',
-        description: 'Innovative electric vehicle with autopilot.',
+        transmission: {
+          en: 'Automatic',
+          ru: 'Автомат'
+        },
+        fuel: {
+          ru: 'Электричка',
+          en: 'Electric'
+        },
+        description: {
+          en: 'Innovative electric vehicle with autopilot.',
+          ru: 'Инновационный электромобиль с автопилотом.'
+        },
         checkboxes: ['Autopilot', 'Panoramic Roof'],
         partner: 'Sprite',
         fuelConsumption: { cityFuel: 7.6, highway: 6.1, combined: 6.8 },
       },
       {
         id: 6,
-        city: 'Варшава',
+        city: {
+          ru: 'Варшава',
+          en: 'Warsaw'
+        },
         model: 'BMW 3 Series',
-        type: 'Курьер',
+        type: {
+          en: 'Courier',
+          ru: 'Курьер'
+        },
         price: {
           day: 15,
           week: 20, 
@@ -145,18 +223,33 @@ export const useCarsStore = defineStore('cars', {
         ],
         year: 2022,
         engineType: 'V6',
-        transmission: 'Automatic',
-        fuel: 'Gasoline',
-        description: 'Luxury sedan with premium features and sporty handling.',
+        transmission: {
+          en: 'Automatic',
+          ru: 'Автомат'
+        },
+        fuel: {
+            ru: 'Дизель',
+            en: 'Diesel'
+        },
+        description: {
+          en: 'Luxury sedan with premium features and sporty handling.',
+          ru: 'Роскошный седан с превосходными характеристиками и спортивной управляемостью.'
+        },
         checkboxes: ['Harman Kardon Audio', 'Heads-Up Display'],
         partner: 'Fanta',
         fuelConsumption: { cityFuel: 5.1, highway: 4.2, combined: 5.4 },
       },
       {
         id: 7,
-        city: 'Варшава',
+        city: {
+          ru: 'Варшава',
+          en: 'Warsaw'
+        },
         model: 'BMW 7 Series',
-        type: 'Такси',
+        type: {
+          en: 'Taxi',
+          ru: 'Такси'
+        },
         price: {
           day: 24,
           week: 50, 
@@ -169,9 +262,18 @@ export const useCarsStore = defineStore('cars', {
         ],
         year: 2022,
         engineType: 'V6',
-        transmission: 'Automatic',
-        fuel: 'Gasoline',
-        description: 'Luxury sedan with premium features and sporty handling.',
+        transmission: {
+          en: 'Automatic',
+          ru: 'Автомат'
+        },
+        fuel: {
+          ru: 'Электричка',
+          en: 'Electric'
+        },
+        description: {
+          en: 'Luxury sedan with premium features and sporty handling.',
+          ru: 'Роскошный седан с превосходными характеристиками и спортивной управляемостью.'
+        },
         checkboxes: ['Harman Kardon Audio', 'Heads-Up Display'],
         partner: 'Fanta',
         fuelConsumption: { cityFuel: 5.1, highway: 4.2, combined: 5.4 },
@@ -181,7 +283,10 @@ export const useCarsStore = defineStore('cars', {
     rentalRequests: [
       {
         id: 1,
-        renterName: 'Иван Иванов',
+        renterName: {
+          ru: 'Иван Иванов',
+          en: 'John Smit'
+        },
         rating: 4,
         rides: 75,
         rentalStartDate: '2024-12-06',
@@ -193,7 +298,10 @@ export const useCarsStore = defineStore('cars', {
       },
       {
         id: 2,
-        renterName: 'Петр Петров',
+        renterName: {
+          ru: 'Петр Петров',
+          en: 'Michael Jackson'
+        },
         rating: 4.7,
         rides: 15,
         rentalStartDate: '2024-12-07',
@@ -207,6 +315,17 @@ export const useCarsStore = defineStore('cars', {
   }),
 
   actions: {
+    setLanguage(lang) {
+      this.currentLanguage = lang;
+    },
+    getLocalizedCarDetails(car) {
+      const language = this.currentLanguage;
+      return {
+        city: car.city[language] || car.city.ru, // По умолчанию используем русский
+        // другие данные для локализации
+      };
+    },
+
     addCar(car) {
       this.cars.push({ ...car, id: Date.now(), available: true });
     },

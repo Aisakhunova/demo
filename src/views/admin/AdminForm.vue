@@ -3,32 +3,46 @@ import { ref, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useCarsStore } from '../../stores/cars';
 
+const {t, locale} = useI18n()
+
 const props = defineProps({
   car: Object, 
 });
 
 const emit = defineEmits(['close']); 
-const {t} = useI18n()
-
 const carsStore = useCarsStore();
 const show = ref(true);
 const currentStep = ref(1);
 
 const cities = [
-   t('cities.warsaw'),
-   t('cities.krakow'),
-   t('cities.poznan')
+  { en: "Warsaw", ru: "Варшава" },
+  { en: "Krakow", ru: "Краков" },
+  { en: "Poznan", ru: "Познань" }
 ]
+
 const rentalTypes = [
-    t('rentalTypes.courier'),
-    t('rentalTypes.taxi'),
-    t('rentalTypes.moped'),
-    t('rentalTypes.other')
+  { en: "Courier", ru: "Курьер" },
+  { en: "Taxi", ru: "Такси" },
+  { en: "Bike", ru: "Мопед" },
+  { en: "Other", ru: "Другое" },
 ]
+
 const partners = [
    t('partners.cocaCola'),
    t('partners.fanta'),
    t('partners.sprite')
+]
+
+const fuelTypes = [
+  { en: "Petrol", ru: "Бензин" },
+  { en: "Diesel", ru: "Дизель" },
+  { en: "Hybrid", ru: "Гибрид" },
+  { en: "Electro", ru: "Электричка" },
+]
+
+const transmissionTypes = [
+  { en: "Auto", ru: "Автомат" },
+  { en: "Manual", ru: "Ручная" }
 ]
 
 const form = ref({
@@ -69,7 +83,21 @@ watch(
   () => props.car,
   (newCar) => {
     if (newCar) {
-      form.value = { ...newCar }; 
+      form.value = { 
+        ...newCar, 
+        city: newCar.city[locale.value] || '',
+        type: newCar.type[locale.value] || '',
+        priceDay: newCar.price.day, 
+        priceWeek: newCar.price.week, 
+        priceMonth: newCar.price.month,
+        cityFuel: newCar.fuelConsumption.cityFuel,
+        highwayFuel: newCar.fuelConsumption.highway,
+        combinedFuel: newCar.fuelConsumption.combined,
+        engineType: newCar.engineType,
+        transmission: newCar.transmission[locale.value],
+        fuel: newCar.fuel[locale.value],
+        description: newCar.description[locale.value]
+       }; 
     } else {
       form.value = {
         city: '',
@@ -97,11 +125,47 @@ watch(
 );
 
 const save = () => {
-  if (props.car) {
-    carsStore.updateCar({...form.value, price: {day: form.value.priceDay, week: form.value.priceWeek, month: form.value.priceMonth}, fuelConsumption: {cityFuel: form.value.cityFuel, highway: form.value.highwayFuel, combined: form.value.combinedFuel }}); 
-  } else {
-    carsStore.addCar({...form.value, price: {day: form.value.priceDay, week: form.value.priceWeek, month: form.value.priceMonth}, fuelConsumption: {cityFuel: form.value.cityFuel, highway: form.value.highwayFuel, combined: form.value.combinedFuel }}); 
+  const selectedCity = cities.find(city => city[locale.value] === form.value.city);
+  const selectedType = rentalTypes.find(type => type[locale.value] === form.value.type);
+  const selectedFuelType = fuelTypes.find(type => type[locale.value] === form.value.fuel);
+  const selectedTransType = transmissionTypes.find(type => type[locale.value] === form.value.transmission);
+
+  const requestBody = {
+    ...form.value, 
+      price: {
+        day: form.value.priceDay, 
+        week: form.value.priceWeek, 
+        month: form.value.priceMonth
+      }, 
+      fuelConsumption: {
+        cityFuel: form.value.cityFuel, 
+        highway: form.value.highwayFuel, 
+        combined: form.value.combinedFuel
+      },
+      city: {
+        en: selectedCity.en,
+        ru: selectedCity.ru
+      },
+      type: {
+        en: selectedType.en,
+        ru: selectedType.ru
+      },
+      transmission: {
+        en: selectedTransType.en,
+        ru: selectedTransType.ru
+      },
+      fuel: {
+        en: selectedFuelType.en,
+        ru: selectedFuelType.ru
+      }
   }
+
+  if (props.car) {
+    carsStore.updateCar(requestBody); 
+  } else {
+    carsStore.addCar(requestBody); 
+  }
+
   emit('close'); 
 };
 
@@ -150,50 +214,115 @@ const fuelValidation = (value) => {
   return numValue >= 0 && numValue <= 10;
 };
 
-
 </script>
 
 <template>
   <v-dialog v-model="show" persistent width="500" max-height="700" @click:outside="emit('close')">
     <v-card class="pa-5">
-      <v-card-title>{{ car ? $t('editCar') : $t('addCar') }}</v-card-title>
+      <v-card-title>  
+        <v-icon 
+          color="black" 
+          class="mr-4" 
+          @click="prevStep" 
+          v-if="currentStep !== 1"
+        >
+          mdi-chevron-left
+        </v-icon>
+        {{ car ? $t('editCar') : $t('addCar') }}
+      </v-card-title>
       <v-card-text>
         <div v-if="currentStep === 1">
-          <v-select v-model="form.city" :items="cities" :label="$t('city')" />
-          <v-select v-model="form.type" :items="rentalTypes" :label="$t('rentalType')" />
-          <v-select v-model="form.partner" :items="partners" :label="$t('partner')" />
+          <v-select 
+            v-model="form.city" 
+            :items="cities.map(city => locale === 'en' ? city.en : city.ru)" 
+            :label="$t('city')"
+          />
+          <v-select 
+            v-model="form.type" 
+            :items="rentalTypes.map(item => locale === 'en' ? item.en : item.ru)" 
+            :label="$t('rentalType')" 
+          />
+          <v-select 
+            v-model="form.partner" 
+            :items="partners" 
+            :label="$t('partner')"
+          />
         </div>
 
         <div v-if="currentStep === 2">
-          <v-text-field v-model="form.model" :label="$t('model')" />
-          <v-text-field v-model="form.priceDay" :label="$t('pricePerDay')" type="number" />
-          <v-text-field v-model="form.priceWeek" :label="$t('pricePerWeek')" type="number" />
-          <v-text-field v-model="form.priceMonth" :label="$t('pricePerMonth')" type="number" />
-          <v-text-field v-model="form.cityFuel" :label="$t('cityFuel')" type="number" :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" />
-          <v-text-field v-model="form.highwayFuel" :label="$t('highwayFuel')" type="number" :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" />
-          <v-text-field v-model="form.combinedFuel" :label="$t('combinedFuel')" type="number" :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" />
-          <v-text-field v-model="form.year" :label="$t('year')" type="number" />
-          <v-text-field v-model="form.engineType" :label="$t('engineVolume')" type="number" />
-          <v-select v-model="form.transmission" :items="['Автомат', 'Ручная']" :label="$t('transmission')" />
-          <v-select v-model="form.fuel" :items="['Дизель', 'Бензин', 'Гибрид', 'Электричка']" :label="$t('fuel')" />
+          <v-text-field 
+            v-model="form.model" 
+            :label="$t('model')" 
+          />
+          <v-text-field 
+            v-model="form.priceDay" 
+            :label="$t('pricePerDay')" 
+            type="number" 
+          />
+          <v-text-field 
+            v-model="form.priceWeek" 
+            :label="$t('pricePerWeek')" 
+            type="number"
+          />
+          <v-text-field 
+            v-model="form.priceMonth" 
+            :label="$t('pricePerMonth')" 
+            type="number" 
+          />
+          <v-text-field 
+            v-model="form.cityFuel" 
+            :label="$t('cityFuel')" 
+            type="number" 
+            :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" 
+          />
+          <v-text-field 
+            v-model="form.highwayFuel" 
+            :label="$t('highwayFuel')" 
+            type="number" 
+            :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" 
+          />
+          <v-text-field 
+            v-model="form.combinedFuel" 
+            :label="$t('combinedFuel')" 
+            type="number" 
+            :rules="[v => fuelValidation(v) || $t('fuelValidationMessage')]" 
+          />
+          <v-text-field 
+            v-model="form.year" 
+            :label="$t('year')" 
+            type="number" 
+          />
+          <v-text-field 
+            v-model="form.engineType" 
+            :label="$t('engineVolume')" 
+          />
+          <v-select 
+            v-model="form.transmission"
+            :items="transmissionTypes.map(item => locale === 'en' ? item.en : item.ru)" 
+            :label="$t('transmission')" 
+          />
+          <v-select 
+            v-model="form.fuel" 
+            :items="fuelTypes.map(item => locale === 'en' ? item.en : item.ru)" 
+            :label="$t('fuel')" 
+          />
         </div>
 
         <div v-if="currentStep === 3">
-          <v-textarea v-model="form.description" label="Описание" />
-          
+          <v-textarea v-model="form.description" :label="t('description')" />
           <v-row>
             <v-col v-for="(option, index) in availableOptions" :key="index" cols="6">
               <v-checkbox
                 v-model="form.checkboxes"
                 :label="option.label"
-                :value="option.value"
+                :value="option.label"
               />
             </v-col>
           </v-row>
         </div>
 
         <div v-if="currentStep === 4">
-          <v-file-input @change="handleFileChange" label="Загрузить фото" multiple accept="image/*" />
+          <v-file-input @change="handleFileChange" :label="$t('uploadPhotos')" multiple accept="image/*" />
           <div v-if="form.images.length">
             <v-carousel>
               <v-carousel-item v-for="(image, index) in form.images" :key="index">
@@ -206,15 +335,12 @@ const fuelValidation = (value) => {
 
       <v-card-actions class="buttons">
         <div>
-          <v-btn @click="prevStep" :disabled="currentStep === 1">Назад</v-btn>
-          <v-btn @click="nextStep" :disabled="!canMoveToNextStep">Далее</v-btn>
+          <v-btn @click="nextStep" :disabled="!canMoveToNextStep">{{ $t('next') }}</v-btn>
         </div>
         <div>
-          <v-btn color="primary" @click="save" :disabled="!canSave">Сохранить</v-btn>
-          <v-btn @click="$emit('close')">Отмена</v-btn>
+          <v-btn color="primary" @click="save" :disabled="!canSave">{{ $t('save') }}</v-btn>
         </div>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
-../../stores/cars

@@ -3,6 +3,9 @@ import { useCarsStore } from '../../stores/cars';
 import CarCard from '../../components/CarCard.vue';
 import AdminForm from './AdminForm.vue';
 import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const {t, locale} = useI18n()
 
 const carsStore = useCarsStore();
 const cars = computed(() => carsStore.cars);
@@ -52,10 +55,10 @@ const approveRental = (request) => {
     if (car) {
       carsStore.updateCar({ ...car, available: false });
     }      
-    alert(`Аренда для ${request.renterName} одобрена!`);
+    alert(`${t('rentFor')} ${request.renterName} ${t('approved')}!`);
   } catch (error) {
-    console.error("Ошибка при одобрении аренды:", error);
-    alert("Произошла ошибка. Попробуйте снова.");
+    console.error($t('rentError'), error);
+    alert($t('tryAgain'));
   }
 };
 
@@ -65,10 +68,10 @@ const rejectRental = (request) => {
     carsStore.removeRequest(request.id)
     requests.value = requests.value.filter(r => r.id !== request.id);
 
-    alert(`Аренда для ${request.renterName} отклонена!`);
+    alert(`${t('rentFor')} ${request.renterName} ${t('rejected')}!`);
   } catch (error) {
-    console.error("Ошибка при отклонении аренды:", error);
-    alert("Произошла ошибка. Попробуйте снова.");
+    console.error($t('rentError2'), error);
+    alert($t('tryAgain'));
   }
 };
 
@@ -80,33 +83,32 @@ onMounted(() => {
 
 <template>
   <v-container>
-    <v-btn @click="openForm" theme="dark" color="dark" variant="flat" class="mb-5">Добавить машину</v-btn>
-    <h1 class="py-5">Ваши Заявки</h1>
+    <v-btn @click="openForm" theme="dark" color="dark" variant="flat" class="mb-5">{{$t('addCar') }}</v-btn>
+    <h1 class="py-5">{{$t('yourRequests') }}</h1>
     <v-row>
       <v-col v-for="request in requests" :key="request.id" cols="12" md="3"> {{ console.log("MY REQS - ", requests) }}
-        <v-card class="card pa-2" >
-          <v-card-title>{{ request.renterName }}</v-card-title>
+        <v-card class="card pa-2" @click="showCarDetails(request)" >
+          <v-card-title>{{ request.renterName[locale] }}</v-card-title>
           <v-card-text>
             <div class="card-desc">
               <div>
                 <div class="d-flex align-center mb-4">
                   <v-icon color="yellow">mdi-star</v-icon>
                   <span class="ml-2">{{ request.rating }} / 5</span>
-                  <span class="ml-4">({{ request.rides }} поездок)</span>
+                  <span class="ml-4">({{ request.rides }} {{$t('rides') }})</span>
                 </div>
               </div>
               <div>
-                <strong>Дата начала аренды:</strong> <p>{{ request.rentalStartDate }}</p>
+                <strong>{{$t('rentStart') }}:</strong> <p>{{ request.rentalStartDate }}</p>
               </div>
               <div>
-                <strong>Дата окончания аренды:</strong> <p>{{ request.rentalEndDate }}</p>
+                <strong>{{$t('rentEnd') }}:</strong> <p>{{ request.rentalEndDate }}</p>
               </div>
-              <p><strong>Статус:</strong> {{ request.status === 'approved' ? 'Одобрено' : 'Ожидает одобрения' }}</p>
+              <p><strong>{{$t('status') }}:</strong> {{ request.status === 'approved' ? $t('approved2') : $t('pending') }}</p>
             </div>
             <div class="buttons-wrapper">
-              <v-btn color="grey" @click="showCarDetails(request)" width="100%">Машина</v-btn>
-                <v-btn v-if="request.status !== 'approved'" color="green" variant="flat" @click="approveRental(request)" width="100%" class="mt-1">Одобрить</v-btn>
-                <v-btn v-if="request.status !== 'approved'" color="error" @click="rejectRental(request)" width="100%" class="mt-1">Отклонить</v-btn>
+                <v-btn v-if="request.status !== 'approved'" color="grey" variant="flat" @click.stop="approveRental(request)" width="100%" class="mt-1">{{$t('approve') }}</v-btn>
+                <v-btn v-if="request.status !== 'approved'" color="black" @click.stop="rejectRental(request)" width="100%" class="mt-1">{{$t('reject') }}</v-btn>
             </div>
           </v-card-text>
         </v-card>
@@ -118,26 +120,29 @@ onMounted(() => {
             <v-row>
               <v-col cols="12" md="12">
                 <h2 class="mb-1">{{ selectedCar.model }} {{ selectedCar.year }}</h2>
-                <h3 class="mb-3 text-green">{{ selectedCar.price.day }}$ /день, {{ selectedCar.price.week }}$ /неделя, {{ selectedCar.price.month }}$ /месяц</h3>
+                <h3 class="mb-3 text-green">{{ selectedCar.price.day }} zł/{{$t('day') }}, {{ selectedCar.price.week }} zł/{{$t('week') }}, {{ selectedCar.price.month }} zł/{{$t('month') }}</h3>
                 <div class="info-table">
                   <div class="info-row">
-                    <div class="info-title"><strong>Тип двигателя:</strong></div>
-                    <div class="info-title"><strong>Трансмиссия:</strong></div>
-                    <div class="info-title"><strong>Тип топлива:</strong></div>
+                    <div class="info-title"><strong>{{$t('rentType') }}:</strong></div>
+                    <div class="info-title"><strong>{{$t('city') }}:</strong></div>
+                    <div class="info-title"><strong>{{$t('engineVolume') }}:</strong></div>
+                    <div class="info-title"><strong>{{$t('transmission') }}:</strong></div>
+                    <div class="info-title"><strong>{{$t('fuelType') }}:</strong></div>
                   </div>
                   <div class="info-row">
+                    <div class="info-value">{{ selectedCar.type[locale] }}</div>
+                    <div class="info-value">{{ selectedCar.city[locale] }}</div>
                     <div class="info-value">{{ selectedCar.engineType }}</div>
-                    <div class="info-value">{{ selectedCar.transmission }}</div>
-                    <div class="info-value">{{ selectedCar.fuel }}</div>
+                    <div class="info-value">{{ selectedCar.transmission[locale] }}</div>
+                    <div class="info-value">{{ selectedCar.fuel[locale] }}</div>
                   </div>
                 </div>
-                <v-divider class="mt-6"></v-divider>
-                <h3 class="mt-2">Расход топлива</h3>
+                <v-divider class="my-6"></v-divider>
                 <div class="info-table">
                   <div class="info-row">
-                    <div class="info-title"><strong>Город:</strong></div>
-                    <div class="info-title"><strong>Шоссе:</strong></div>
-                    <div class="info-title"><strong>Смешанный:</strong></div>
+                    <div class="info-title"><strong>{{$t('cityFuel') }}:</strong></div>
+                    <div class="info-title"><strong>{{$t('highwayFuel') }}:</strong></div>
+                    <div class="info-title"><strong>{{$t('combinedFuel') }}:</strong></div>
                   </div>
                   <div class="info-row">
                     <div class="info-value">{{ selectedCar.fuelConsumption.cityFuel }}</div>
@@ -150,7 +155,7 @@ onMounted(() => {
               <v-col cols="12" md="12">
                 <v-row>
                   <v-col cols="12" md="12" v-if="selectedCar.description">
-                    <h4 class="text-h6">Описание</h4>
+                    <h4 class="text-h6">{{$t('description') }}</h4>
                     <strong>{{ selectedCar.description }}</strong>
                   </v-col>
                   <v-col cols="12" md="12" v-if="selectedCar.checkboxes?.length">
@@ -173,13 +178,13 @@ onMounted(() => {
             </v-row>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="error" variant="flat" text @click="carDetailsDialog = false">Закрыть</v-btn>
+            <v-btn color="error" variant="flat" text @click="carDetailsDialog = false">{{$t('close') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
   </v-row>
 
-  <h1 class="py-5">Ваши машины</h1>
+  <h1 class="py-5">{{$t('yourCars') }}</h1>
     <v-row>
       <v-col v-for="car in cars" :key="car.id" cols="12" md="4">
         <CarCard :car="car" @edit="editCar" @delete="deleteCar" :isAdmin="true"/>
