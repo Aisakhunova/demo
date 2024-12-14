@@ -154,9 +154,9 @@ onMounted(() => {
 
               <v-col cols="12" md="12">
                 <v-row>
-                  <v-col cols="12" md="12" v-if="selectedCar.description">
+                  <v-col cols="12" md="12" v-if="selectedCar.description[locale]">
                     <h4 class="text-h6">{{$t('description') }}</h4>
-                    <strong>{{ selectedCar.description }}</strong>
+                    <strong>{{ selectedCar.description[locale] }}</strong>
                   </v-col>
                   <v-col cols="12" md="12" v-if="selectedCar.checkboxes?.length">
                     <v-chip-group column>

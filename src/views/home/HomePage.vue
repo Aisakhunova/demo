@@ -182,7 +182,7 @@ const filteredCars = computed(() => {
                 <v-icon>{{ isFilterOpen.price ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
               </v-btn>
                 <div v-if="isFilterOpen.price" class="filter-content">
-                  <div class="text-end">{{ priceRange[0] }} ₽ - {{ priceRange[1] }} ₽</div>
+                  <div class="text-end">{{ priceRange[0] }} zł - {{ priceRange[1] }} zł</div>
                   <v-range-slider
                     v-model="priceRange"
                     :min="0"
