@@ -93,22 +93,7 @@ const companyInfo = ref({
       </v-row>
       <v-row class="d-flex align-baseline">
         <v-col cols="12" md="7">
-            <v-row>
-              <v-col cols="12" md="12" v-if="car?.description[locale]">
-                <h4 class="text-h6">{{ $t('description') }}</h4>
-                <strong>{{ car?.description[locale] }}</strong>
-              </v-col>
-              <v-col cols="12" md="12" v-if="car?.checkboxes?.length">
-                <v-chip-group column>
-                  <v-chip v-for="(option, index) in car?.checkboxes" :key="index" class="ma-1">
-                    {{ option }}
-                  </v-chip>
-                </v-chip-group>
-              </v-col>
-            </v-row>
-          </v-col>
-       <v-col cols="12" md="5">
-        <v-card class="pa-5 mt-5">
+          <v-card class="pa-5 mb-8">
             <h4 class="mb-1">{{ $t('author') }}</h4>
             <v-row dense>
               <v-col cols="auto">
@@ -128,8 +113,28 @@ const companyInfo = ref({
               </v-col>
             </v-row>
           </v-card>
+            <v-row >
+              <v-col cols="12" md="12" v-if="car?.description[locale]">
+                <h4 class="text-h6">{{ $t('description') }}</h4>
+                <strong>{{ car?.description[locale] }}</strong>
+              </v-col>
+              <v-col cols="12" md="12" v-if="car?.checkboxes?.length">
+                <v-chip-group column>
+                  <v-chip v-for="(option, index) in car?.checkboxes" :key="index" class="ma-1">
+                    {{ option }}
+                  </v-chip>
+                </v-chip-group>
+              </v-col>
+            </v-row>
+          </v-col>
+       <v-col cols="12" md="5">
+        <v-row justify="center">
+      <v-date-picker width="400" hide-header="true"></v-date-picker>
+    </v-row>
        </v-col>
       </v-row>
+      <v-container>
+  </v-container>
     </v-card>
   </v-container>
 </template>
