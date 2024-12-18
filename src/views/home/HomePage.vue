@@ -88,7 +88,6 @@ watch(locale, (newLocale) => {
   }
 });
 
-
 const models = ['BMW', 'Tesla', 'Ford', 'Honda', 'Toyota', 'Chevrolet' ];
 const partners = ['Coca Cola', 'Fanta', 'Sprite'];
 
@@ -106,6 +105,7 @@ const localizedTypes = computed(() =>
 const filteredCars = computed(() => {
   return carsStore.cars.filter((car) => {
     const carPrice1 = pricePeriods.find(item => item[locale.value] === pricePeriod.value); 
+    console.log('carPrice1-', carPrice1)
     const cons1 = consumptionTypes.find(item => item[locale.value] === consumptionType.value); 
     const carPrice = car.price[carPrice1['en']]
     const cons = car.fuelConsumption[cons1.value]

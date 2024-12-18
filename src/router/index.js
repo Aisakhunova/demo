@@ -9,7 +9,8 @@ const routes = [
     {
         path: '/car/:carId',
         name: 'car-detail',
-        component: CarDetail
+        component: CarDetail,
+        props: (route) => ({ isAdmin: true }) 
       },
 ];
 

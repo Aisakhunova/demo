@@ -1,14 +1,16 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router'; 
 import { useCarsStore } from '../stores/cars';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import RentForm from '../views/home/RentForm.vue';
 
 const route = useRoute();
 const router = useRouter(); 
 const carId = route.params.carId;
 const car = ref(null)
 const {t, locale} = useI18n()
+const isAdmin = computed(() => route.query.isAdmin === 'false');
 
 const carsStore = useCarsStore();
 
@@ -16,6 +18,17 @@ onMounted(() => {
   car.value = carsStore.getCarById(Number(carId)); 
   console.log("CAR - ", car.value)
 });
+
+const showRentForm = ref(false);
+
+const toggleRentalForm = () => {
+  console.log("toggle - ", showRentForm.value)
+  showRentForm.value = !showRentForm.value;
+};
+
+const handleRentalSubmit = (rentalData) => {
+  console.log(t('rentFormSent'), rentalData);
+};
 
 const goBack = () => {
   router.go(-1); 
@@ -113,28 +126,41 @@ const companyInfo = ref({
               </v-col>
             </v-row>
           </v-card>
-            <v-row >
-              <v-col cols="12" md="12" v-if="car?.description[locale]">
-                <h4 class="text-h6">{{ $t('description') }}</h4>
-                <strong>{{ car?.description[locale] }}</strong>
-              </v-col>
-              <v-col cols="12" md="12" v-if="car?.checkboxes?.length">
-                <v-chip-group column>
-                  <v-chip v-for="(option, index) in car?.checkboxes" :key="index" class="ma-1">
-                    {{ option }}
-                  </v-chip>
-                </v-chip-group>
-              </v-col>
-            </v-row>
-          </v-col>
-       <v-col cols="12" md="5">
-        <v-row justify="center">
-      <v-date-picker width="400" hide-header="true"></v-date-picker>
-    </v-row>
-       </v-col>
+          <v-row >
+            <v-col cols="12" md="12" v-if="car?.description[locale]">
+              <h4 class="text-h6">{{ $t('description') }}</h4>
+              <strong>{{ car?.description[locale] }}</strong>
+            </v-col>
+            <v-col cols="12" md="12" v-if="car?.checkboxes?.length">
+              <v-chip-group column>
+                <v-chip v-for="(option, index) in car?.checkboxes" :key="index" class="ma-1">
+                  {{ option }}
+                </v-chip>
+              </v-chip-group>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12" md="5">
+          <v-row justify="center">
+            <v-date-picker width="400" hide-header="true"/>
+            <v-btn v-if="isAdmin"
+              :class="car?.available ? 'success--text' : 'red--text'" 
+              @click.stop="toggleRentalForm" variant="flat" 
+              :disabled="!car?.available"
+              width="100%"
+              color="green"
+            > 
+              {{ $t('rent') }}
+            </v-btn>
+          </v-row>
+        </v-col>
       </v-row>
-      <v-container>
-  </v-container>
     </v-card>
   </v-container>
+  <RentForm
+    :showRentalForm="showRentForm"
+    :carId="car?.id"
+    @toggleRentalForm="toggleRentalForm"
+    @submitRentalForm="handleRentalSubmit"
+  />
 </template>

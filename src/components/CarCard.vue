@@ -28,7 +28,11 @@ const handleRentalSubmit = (rentalData) => {
 };
 
 const navigateToCarDetail = () => {
-  router.push({ name: 'car-detail', params: { carId: props.car.id } });
+  router.push({ 
+    name: 'car-detail', 
+    params: { carId: props.car.id}, 
+    query: {isAdmin: props.isAdmin} 
+  });
 };
 
 </script>
@@ -39,50 +43,17 @@ const navigateToCarDetail = () => {
       <v-row class="pb-8">
         <v-col cols="12" md="12">
           <v-card class="pa-5 card">
-          <h2>{{ props.car.model }}</h2>
-          <h2 class="mb-1">{{ props.car.year }}</h2>
-          <h3 class="text-green">{{ props.car.price.day }} zł/{{ $t('day') }},</h3>
-          <h3 class="text-green">{{ props.car.price.week }} zł/{{ $t('week') }},</h3>
-          <h3 class="mb-3 text-green">{{ props.car.price.month }} zł/{{ $t('month') }}</h3>
-          
-          <div class="info-table">
-            <div class="info-row">
-              <div class="info-title"><strong>{{ $t('rentType') }}:</strong></div>
-              <div class="info-title"><strong>{{ $t('city') }}:</strong></div>
-              <div class="info-title"><strong>{{ $t('partner') }}</strong></div>
-              <div class="info-title"><strong>{{ $t('engineVolume') }}:</strong></div>
-              <div class="info-title"><strong>{{ $t('transmission') }}:</strong></div>
-              <div class="info-title"><strong>{{ $t('fuelType') }}:</strong></div>
-            </div>
-            <div class="info-row">
-              <div class="info-value">{{ props.car.type[locale]}}</div>
-              <div class="info-value">{{ props.car.city[locale]}}</div>
-              <div class="info-value">{{ props.car.partner }}</div>
-              <div class="info-value">{{ props.car.engineType }}</div>
-              <div class="info-value">{{ props.car.transmission[locale] }}</div>
-              <div class="info-value">{{ props.car.fuel[locale] }}</div>
-            </div>
-          </div>
-          <v-divider class="my-6"></v-divider>
-          <div class="info-table">
-            <div class="info-row">
-              <div class="info-title"><strong>{{ $t('cityFuel') }}:</strong></div>
-              <div class="info-title"><strong>{{ $t('highwayFuel') }}:</strong></div>
-              <div class="info-title"><strong>{{ $t('combinedFuel') }}:</strong></div>
-            </div>
-            <div class="info-row">
-              <div class="info-value">{{ props.car.fuelConsumption.cityFuel }}</div>
-              <div class="info-value">{{ props.car.fuelConsumption.highway }}</div>
-              <div class="info-value">{{ props.car.fuelConsumption.combined }}</div>
-            </div>
-          </div>
-          <h3 v-if="car.available" class="success--text mt-3 mb-5" >{{ $t('carIsAvailable') }}</h3>
-        <h3 v-else class="red--text mt-3">
-          {{ $t('orderedUntill') }}: 
-          {{ carsStore.getCarRentalEndDate(car.id) || $t('noData') }}
-        </h3>
+            <h2>{{ props.car.model }}</h2>
+            <h2 class="mb-1">{{ props.car.year }}</h2>
+            <h3 class="text-green">{{ props.car.price.day }} zł/{{ $t('day') }},</h3>
+            <h3 class="text-green">{{ props.car.price.week }} zł/{{ $t('week') }},</h3>
+            <h3 class="mb-3 text-green">{{ props.car.price.month }} zł/{{ $t('month') }}</h3>
+            <h3 v-if="car.available" class="success--text mt-3 mb-5" >{{ $t('carIsAvailable') }}</h3>
+            <h3 v-else class="red--text mt-3">
+              {{ $t('orderedUntill') }}: 
+              {{ carsStore.getCarRentalEndDate(car.id) || $t('noData') }}
+            </h3>
           </v-card>
-
         </v-col>
       </v-row>
       <v-carousel delimiter-icon="mdi-square" show-arrows="hover" class="responsive-carousel">
